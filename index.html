@@ -8,7 +8,407 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ============================================
+           CONFIGURATION DES IMAGES
+           ============================================ */
+        :root {
+            --color-bg: #0a0a0b;
+            --color-surface: #151518;
+            --color-surface-hover: #1e1e22;
+            --color-border: #2a2a30;
+            --color-text: #f5f5f5;
+            --color-text-muted: #888;
+            --color-accent: #c9a962;
+            --color-accent-light: #e5d4a1;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           PHASES CONTAINER
+           ============================================ */
+        .phase {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .phase.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* ============================================
+           PHASE: WELCOME (ACCUEIL)
+           ============================================ */
+        #phase-welcome {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .welcome-title {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 50%, var(--color-text) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--color-accent);
+            margin-bottom: 3rem;
+            font-style: italic;
+            letter-spacing: 0.05em;
+        }
+
+        .welcome-description {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .welcome-description p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--color-text);
+        }
+
+        .welcome-description p:first-child {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-description span {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, var(--color-accent), #b8944d);
+            border: none;
+            color: var(--color-bg);
+            padding: 1.25rem 3.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+            box-shadow: 0 10px 40px rgba(201, 169, 98, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(201, 169, 98, 0.5);
+        }
+
+        .start-btn:active {
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           PHASE: OBSERVATION
+           ============================================ */
+        #phase-observation {
+            position: relative;
+        }
+
+        .observation-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+
+        .observation-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .observation-container {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            animation: zoomIn 10s ease-out forwards;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.95);
+            }
+
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        .observation-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .timer-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+            width: 100%;
+            transform-origin: left;
+            animation: timerShrink 10s linear forwards;
+        }
+
+        @keyframes timerShrink {
+            from {
+                transform: scaleX(1);
+            }
+
+            to {
+                transform: scaleX(0);
+            }
+        }
+
+        .timer-text {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        /* ============================================
+           PHASE: CONSTRUCTION (QUIZ)
+           ============================================ */
+        #phase-construction {
+            padding: 2rem;
+        }
+
+        .construction-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .construction-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .question-counter {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+        }
+
+        .question-container {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .question-text {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .choices {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .choice-btn {
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            color: var(--color-text);
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+        }
+
+        .choice-btn:hover {
+            border-color: var(--color-accent);
+            background: var(--color-surface-hover);
+            transform: translateY(-2px);
+        }
+
+        .choice-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           PHASE: COMPARISON
+           ============================================ */
+        #phase-comparison {
+            padding: 1rem;
+        }
+
+        .comparison-title {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .comparison-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-side {
+            position: relative;
+        }
+
+        .comparison-label {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            margin-bottom: 0.75rem;
+            text-align: center;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .comparison-frame {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .comparison-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .comparison-frame img.layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .replay-btn {
+            background: linear-gradient(135deg, var(--color-accent), #b8944d);
+            border: none;
+            color: var(--color-bg);
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+            box-shadow: 0 10px 30px rgba(201, 169, 98, 0.3);
+        }
+
+        .replay-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 169, 98, 0.4);
+        }
+
+        /* ============================================
+           FADE TRANSITION
+           ============================================ */
+        .fade-out {
+            animation: fadeOut 0.6s ease-out forwards;
+        }
+    </style>
 </head>
 
 <body>
@@ -44,27 +444,16 @@
          PHASE 2: CONSTRUCTION (QUIZ)
          ============================================ -->
     <section id="phase-construction" class="phase">
-        <div class="painter-section">
-            <img src="assets/peintre.png" alt="Le Peintre" class="painter-avatar">
-            <div class="painter-bubble">
-                <p class="painter-name">Le Maître</p>
-                <p>Aidez-moi à reconstituer mon tableau ! Répondez à ces questions de mémoire...</p>
-            </div>
-        </div>
-
         <div class="construction-header">
             <h1 class="construction-title">Reconstruisez le tableau</h1>
             <p class="question-counter">Question <span id="current-question">1</span>/3</p>
-            <div id="question-progress" class="question-progress-container">
-                <div class="question-progress-dot active"></div>
-                <div class="question-progress-dot"></div>
-                <div class="question-progress-dot"></div>
-            </div>
         </div>
 
-        <div class="question-container">
+        <!-- Question -->
+        <div class="question-section">
             <p id="question-text" class="question-text"></p>
             <div id="choices" class="choices"></div>
+        </div>
         </div>
     </section>
 
@@ -93,7 +482,205 @@
         <button class="replay-btn" onclick="restartGame()">🔄 Rejouer</button>
     </section>
 
-    <script src="script.js"></script>
+    <script>
+        // ============================================
+        // CONFIGURATION DES IMAGES
+        // Remplacez les valeurs entre crochets par vos liens
+        // ============================================
+
+        const IMG_FOND_PIECE = "assets/sans-element.png";
+        const IMG_VRAI_TABLEAU = "assets/tableau-final.jpg";
+
+        // Question 1 (La Fille)
+        const IMG_Q1_AVEC_RUBAN = "assets/fille-avec-ruban.png";
+        const IMG_Q1_SANS_RUBAN = "assets/fille-sans-ruban.png";
+
+        // Question 2 (Les Cadres au mur)
+        const IMG_Q2_2_TABLEAUX = "assets/version-2tableaux.png";
+        const IMG_Q2_3_TABLEAUX = "assets/version-3tableaux.png";
+
+        // Question 3 (L'Ours)
+        const IMG_Q3_OURS_NOIR = "assets/ours-noir.png";
+        const IMG_Q3_OURS_BLANC = "assets/ours-blanc.png";
+
+        // ============================================
+        // DONNÉES DU QUIZ
+        // ============================================
+        const questions = [
+            {
+                text: "La fille portait-elle un ruban ?",
+                choices: [
+                    { label: "Oui", image: IMG_Q1_AVEC_RUBAN },
+                    { label: "Non", image: IMG_Q1_SANS_RUBAN }
+                ]
+            },
+            {
+                text: "Combien de tableaux y avait-il au mur ?",
+                choices: [
+                    { label: "Deux", image: IMG_Q2_2_TABLEAUX },
+                    { label: "Trois", image: IMG_Q2_3_TABLEAUX }
+                ]
+            },
+            {
+                text: "De quelle couleur était l'ours ?",
+                choices: [
+                    { label: "Noir", image: IMG_Q3_OURS_NOIR },
+                    { label: "Blanc", image: IMG_Q3_OURS_BLANC }
+                ]
+            }
+        ];
+
+        // ============================================
+        // ÉTAT DU JEU
+        // ============================================
+        let currentQuestionIndex = 0;
+        let selectedLayers = [];
+
+        // ============================================
+        // ÉLÉMENTS DOM
+        // ============================================
+        const phaseWelcome = document.getElementById('phase-welcome');
+        const phaseObservation = document.getElementById('phase-observation');
+        const phaseConstruction = document.getElementById('phase-construction');
+        const phaseComparison = document.getElementById('phase-comparison');
+        const imgObservation = document.getElementById('img-observation');
+        const imgOriginal = document.getElementById('img-original');
+        const questionText = document.getElementById('question-text');
+        const choicesContainer = document.getElementById('choices');
+        const currentQuestionSpan = document.getElementById('current-question');
+        const timerCountdown = document.getElementById('timer-countdown');
+        const userResult = document.getElementById('user-result');
+
+        // ============================================
+        // FONCTIONS DU JEU
+        // ============================================
+        function initGame() {
+            // Précharger les images
+            imgObservation.src = IMG_VRAI_TABLEAU;
+            imgOriginal.src = IMG_VRAI_TABLEAU;
+        }
+
+        function startGame() {
+            // Transition de l'accueil vers l'observation
+            phaseWelcome.classList.add('fade-out');
+
+            setTimeout(() => {
+                phaseWelcome.classList.remove('active', 'fade-out');
+                phaseObservation.classList.add('active');
+
+                // Réinitialiser et démarrer le timer
+                const timerBar = document.querySelector('.timer-bar');
+                if (timerBar) {
+                    timerBar.style.animation = 'none';
+                    timerBar.offsetHeight;
+                    timerBar.style.animation = 'timerShrink 10s linear forwards';
+                }
+
+                startObservationTimer();
+            }, 600);
+        }
+
+        function startObservationTimer() {
+            let seconds = 10;
+            timerCountdown.textContent = seconds;
+
+            const interval = setInterval(() => {
+                seconds--;
+                timerCountdown.textContent = seconds;
+
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    transitionToConstruction();
+                }
+            }, 1000);
+        }
+
+        function transitionToConstruction() {
+            phaseObservation.classList.add('fade-out');
+
+            setTimeout(() => {
+                phaseObservation.classList.remove('active', 'fade-out');
+                phaseConstruction.classList.add('active');
+                showQuestion();
+            }, 600);
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            currentQuestionSpan.textContent = currentQuestionIndex + 1;
+            questionText.textContent = question.text;
+
+            choicesContainer.innerHTML = '';
+            question.choices.forEach((choice, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.textContent = choice.label;
+                btn.onclick = () => selectChoice(index);
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        function selectChoice(choiceIndex) {
+            const question = questions[currentQuestionIndex];
+            const selectedImage = question.choices[choiceIndex].image;
+
+            // Sauvegarder le choix pour la comparaison finale
+            selectedLayers.push(selectedImage);
+
+            // Passer à la question suivante ou terminer
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(showQuestion, 300);
+            } else {
+                setTimeout(transitionToComparison, 500);
+            }
+        }
+
+        function transitionToComparison() {
+            phaseConstruction.classList.add('fade-out');
+
+            setTimeout(() => {
+                phaseConstruction.classList.remove('active', 'fade-out');
+                phaseComparison.classList.add('active');
+                buildFinalResult();
+            }, 600);
+        }
+
+        function buildFinalResult() {
+            userResult.innerHTML = '';
+
+            // Fond
+            const fondImg = document.createElement('img');
+            fondImg.src = IMG_FOND_PIECE;
+            fondImg.alt = 'Fond';
+            userResult.appendChild(fondImg);
+
+            // Calques sélectionnés
+            selectedLayers.forEach(src => {
+                const layerImg = document.createElement('img');
+                layerImg.src = src;
+                layerImg.alt = 'Calque';
+                layerImg.className = 'layer';
+                userResult.appendChild(layerImg);
+            });
+        }
+
+        function restartGame() {
+            // Réinitialiser l'état
+            currentQuestionIndex = 0;
+            selectedLayers = [];
+
+            // Retour à l'accueil
+            phaseComparison.classList.remove('active');
+            phaseWelcome.classList.add('active');
+        }
+
+        // ============================================
+        // DÉMARRAGE
+        // ============================================
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
 </body>
 
 </html>
