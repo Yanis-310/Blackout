@@ -24,7 +24,21 @@
             <p>Seulement, ici, vous n'aurez pas à toucher directement à la toile.</p>
         </div>
 
-        <button class="start-btn" onclick="startGame()">Démarrer le test</button>
+        <div class="level-selection">
+            <p class="level-selection-title">Choisissez votre niveau :</p>
+            <div class="level-buttons">
+                <button class="level-btn level-btn-essai" onclick="startGame(1)">
+                    <span class="level-icon">🎨</span>
+                    <span class="level-name">Mode Essai</span>
+                    <span class="level-info">3 questions</span>
+                </button>
+                <button class="level-btn level-btn-buland" onclick="startGame(2)">
+                    <span class="level-icon">🖼️</span>
+                    <span class="level-name">Tableau Buland</span>
+                    <span class="level-info">10 questions</span>
+                </button>
+            </div>
+        </div>
     </section>
 
     <!-- ============================================
@@ -54,11 +68,10 @@
 
         <div class="construction-header">
             <h1 class="construction-title">Reconstruisez le tableau</h1>
-            <p class="question-counter">Question <span id="current-question">1</span>/3</p>
+            <p class="question-counter">Question <span id="current-question">1</span>/<span
+                    id="total-questions">3</span></p>
             <div id="question-progress" class="question-progress-container">
-                <div class="question-progress-dot active"></div>
-                <div class="question-progress-dot"></div>
-                <div class="question-progress-dot"></div>
+                <!-- Les dots sont générés dynamiquement par JS -->
             </div>
         </div>
 
