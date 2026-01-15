@@ -5,6 +5,8 @@
 // LEVEL 1 - Tableau original (3 questions - Mode Essai)
 const LEVEL1 = {
     name: "Mode Essai",
+    title: "L'Enfant au toton",
+    author: "Jean Siméon Chardin",
     observationTime: 10,
     fondPiece: "assets/sans-element.png",
     vraiTableau: "assets/tableau-final.jpg",
@@ -36,6 +38,8 @@ const LEVEL1 = {
 // LEVEL 2 - Tableau Eugène Buland (10 questions)
 const LEVEL2 = {
     name: "Tableau Buland",
+    title: "Les héritiers",
+    author: "Jean-Eugène Buland",
     observationTime: 15,
     fondPiece: "assets/level2/fond-vide.jpg",
     vraiTableau: "assets/level2/tableau-complet.jpg",
@@ -144,6 +148,7 @@ const LEVEL2 = {
 let currentLevel = null;
 let currentQuestionIndex = 0;
 let selectedLayers = [];
+let ws = null; // WebSocket connection
 
 // ============================================
 // ÉLÉMENTS DOM
@@ -160,11 +165,16 @@ const totalQuestionsSpan = document.getElementById('total-questions');
 const timerCountdown = document.getElementById('timer-countdown');
 const userResult = document.getElementById('user-result');
 const questionProgress = document.getElementById('question-progress');
+const paintingTitle = document.getElementById('painting-title');
+const paintingAuthor = document.getElementById('painting-author');
 
 // ============================================
 // FONCTIONS DU JEU
 // ============================================
 function initGame() {
+    // Connexion WebSocket
+    connectWS();
+
     // Récupérer le niveau depuis l'URL ou utiliser LEVEL1 par défaut
     const urlParams = new URLSearchParams(window.location.search);
     const levelNumber = parseInt(urlParams.get('level')) || 1;
@@ -174,6 +184,10 @@ function initGame() {
     // Initialiser les images
     imgObservation.src = currentLevel.vraiTableau;
     imgOriginal.src = currentLevel.vraiTableau;
+
+    // Mettre à jour les infos du tableau
+    if (paintingTitle) paintingTitle.textContent = currentLevel.title;
+    if (paintingAuthor) paintingAuthor.textContent = currentLevel.author;
 
     // Mettre à jour le nombre total de questions
     if (totalQuestionsSpan) {
@@ -238,6 +252,17 @@ function showQuestion() {
 
     // Mettre à jour la barre de progression
     updateProgressBar();
+
+    // Envoyer les choix au téléphone via WebSocket
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        const choiceLabels = question.choices.map(c => c.label);
+        ws.send(JSON.stringify({
+            type: 'QUESTION_START',
+            questionIndex: currentQuestionIndex + 1,
+            totalQuestions: currentLevel.questions.length,
+            choices: choiceLabels
+        }));
+    }
 
     choicesContainer.innerHTML = '';
     question.choices.forEach((choice, index) => {
@@ -334,6 +359,42 @@ function updateEndGameButtons() {
 function restartGame() {
     // Retourner à la page d'accueil avec transition
     navigateTo('index.html');
+}
+
+// ============================================
+// WEBSOCKET
+// ============================================
+function connectWS() {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = protocol + '//' + window.location.host;
+
+    console.log('Connexion WS vers:', wsUrl);
+    ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+        console.log('Connecté au serveur WS');
+    };
+
+    ws.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'ANSWER' && phaseConstruction.classList.contains('active')) {
+                console.log('Réponse reçue du téléphone:', data.value);
+                // Vérifier si l'index est valide pour la question actuelle
+                const currentQ = currentLevel.questions[currentQuestionIndex];
+                if (currentQ && data.value < currentQ.choices.length) {
+                    selectChoice(data.value);
+                }
+            }
+        } catch (e) {
+            console.error('Erreur message WS:', e);
+        }
+    };
+
+    ws.onclose = () => {
+        console.log('WS déconnecté, tentative de reconnexion...');
+        setTimeout(connectWS, 3000);
+    };
 }
 
 // ============================================

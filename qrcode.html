@@ -57,6 +57,20 @@
 
     <script src="transitions.js"></script>
     <script>
+        // Génération dynamique du QR Code basé sur l'URL actuelle
+        const protocol = window.location.protocol;
+        // On utilise l'IP fournie par l'utilisateur pour être sûr que ça marche sur le téléphone
+        const host = "172.20.10.3";
+        const port = window.location.port || "3000";
+        const controllerUrl = `${protocol}//${host}:${port}/controller.html`;
+
+        console.log('Controller URL:', controllerUrl);
+
+        const qrImg = document.querySelector('.qr-code img');
+        if (qrImg) {
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(controllerUrl)}`;
+        }
+
         document.addEventListener('click', function () {
             navigateTo('ready.html');
         });
