@@ -37,11 +37,8 @@ wss.on('connection', (ws) => {
     });
 });
 
-const PORT = 3000;
-const localIP = ip.address();
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
-    console.log(`Serveur démarré !`);
-    console.log(`- Jeu (PC) : http://localhost:${PORT}`);
-    console.log(`- Manette (Tel) : http://172.20.10.3:${PORT}/controller.html`);
+    console.log(`Serveur démarré sur le port ${PORT}`);
 });

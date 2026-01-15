@@ -58,11 +58,9 @@
     <script src="transitions.js"></script>
     <script>
         // Génération dynamique du QR Code basé sur l'URL actuelle
-        const protocol = window.location.protocol;
-        // On utilise l'IP fournie par l'utilisateur pour être sûr que ça marche sur le téléphone
-        const host = "172.20.10.3";
-        const port = window.location.port || "3000";
-        const controllerUrl = `${protocol}//${host}:${port}/controller.html`;
+        // Fonctionne en local ET sur Render/cloud
+        const baseUrl = window.location.origin;
+        const controllerUrl = `${baseUrl}/controller.html`;
 
         console.log('Controller URL:', controllerUrl);
 
