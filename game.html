@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackout - Le Jeu</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- ============================================
+         PHASE 1: OBSERVATION
+         ============================================ -->
+    <section id="phase-observation" class="phase active">
+        <h1 class="observation-title">Observez attentivement</h1>
+        <p class="observation-subtitle">Mémorisez les détails du tableau</p>
+        <div class="observation-container">
+            <img id="img-observation" src="" alt="Tableau à mémoriser">
+            <div class="timer-bar"></div>
+            <div class="timer-text"><span id="timer-countdown">10</span>s</div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PHASE 2: CONSTRUCTION (QUIZ)
+         ============================================ -->
+    <section id="phase-construction" class="phase">
+        <div class="painter-section">
+            <img src="assets/peintre.png" alt="Le Peintre" class="painter-avatar">
+            <div class="painter-bubble">
+                <p class="painter-name">Le Maître</p>
+                <p>Aidez-moi à reconstituer mon tableau ! Répondez à ces questions de mémoire...</p>
+            </div>
+        </div>
+
+        <div class="construction-header">
+            <h1 class="construction-title">Reconstruisez le tableau</h1>
+            <p class="question-counter">Question <span id="current-question">1</span>/<span
+                    id="total-questions">3</span></p>
+            <div id="question-progress" class="question-progress-container">
+                <!-- Les dots sont générés dynamiquement par JS -->
+            </div>
+        </div>
+
+        <div class="question-container">
+            <p id="question-text" class="question-text"></p>
+            <div id="choices" class="choices"></div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PHASE 3: COMPARAISON FINALE
+         ============================================ -->
+    <section id="phase-comparison" class="phase">
+        <h1 class="comparison-title">Comparaison</h1>
+        <p class="comparison-subtitle">Votre reconstruction vs le tableau original</p>
+
+        <div class="comparison-container">
+            <div class="comparison-side">
+                <p class="comparison-label">Votre Tableau</p>
+                <div id="user-result" class="comparison-frame">
+                    <!-- Images du montage final -->
+                </div>
+            </div>
+            <div class="comparison-side">
+                <p class="comparison-label">Original</p>
+                <div class="comparison-frame">
+                    <img id="img-original" src="" alt="Tableau original">
+                </div>
+            </div>
+        </div>
+
+        <button class="replay-btn" onclick="restartGame()">Rejouer</button>
+    </section>
+
+    <script src="game.js"></script>
+</body>
+
+</html>

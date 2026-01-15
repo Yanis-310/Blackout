@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackout - Consignes</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <section id="phase-intro" class="phase active">
+        <div class="intro-card">
+            <p class="intro-text">Pour ce faire, vous disposez de quelques secondes pour mémoriser un tableau et ainsi,
+                l'aider à le reconstruire.</p>
+        </div>
+        <p class="intro-hint">appuyer n'importe où pour continuer</p>
+    </section>
+
+    <script>
+        // Rediriger vers le jeu au clic n'importe où
+        document.addEventListener('click', function () {
+            window.location.href = 'qrcode.html';
+        });
+    </script>
+</body>
+
+</html>

@@ -148,8 +148,6 @@ let selectedLayers = [];
 // ============================================
 // ÉLÉMENTS DOM
 // ============================================
-const phaseWelcome = document.getElementById('phase-welcome');
-const phaseIntro = document.getElementById('phase-intro');
 const phaseObservation = document.getElementById('phase-observation');
 const phaseConstruction = document.getElementById('phase-construction');
 const phaseComparison = document.getElementById('phase-comparison');
@@ -167,15 +165,11 @@ const questionProgress = document.getElementById('question-progress');
 // FONCTIONS DU JEU
 // ============================================
 function initGame() {
-    // Ajouter l'événement de clic sur l'écran intro
-    if (phaseIntro) {
-        phaseIntro.addEventListener('click', startObservationPhase);
-    }
-}
+    // Récupérer le niveau depuis l'URL ou utiliser LEVEL1 par défaut
+    const urlParams = new URLSearchParams(window.location.search);
+    const levelNumber = parseInt(urlParams.get('level')) || 1;
 
-function startGame(levelNumber) {
-    // Sélectionner le niveau
-    currentLevel = levelNumber === 1 ? LEVEL1 : LEVEL2;
+    currentLevel = levelNumber === 2 ? LEVEL2 : LEVEL1;
 
     // Initialiser les images
     imgObservation.src = currentLevel.vraiTableau;
@@ -189,32 +183,15 @@ function startGame(levelNumber) {
     // Générer les dots de progression
     generateProgressDots();
 
-    // Transition vers l'écran intro
-    phaseWelcome.classList.add('fade-out');
+    // Démarrer le timer
+    const timerBar = document.querySelector('.timer-bar');
+    if (timerBar) {
+        timerBar.style.animation = 'none';
+        timerBar.offsetHeight;
+        timerBar.style.animation = `timerShrink ${currentLevel.observationTime}s linear forwards`;
+    }
 
-    setTimeout(() => {
-        phaseWelcome.classList.remove('active', 'fade-out');
-        phaseIntro.classList.add('active');
-    }, 600);
-}
-
-function startObservationPhase() {
-    // Transition de l'intro vers l'observation
-    phaseIntro.classList.add('fade-out');
-
-    setTimeout(() => {
-        phaseIntro.classList.remove('active', 'fade-out');
-        phaseObservation.classList.add('active');
-
-        const timerBar = document.querySelector('.timer-bar');
-        if (timerBar) {
-            timerBar.style.animation = 'none';
-            timerBar.offsetHeight;
-            timerBar.style.animation = `timerShrink ${currentLevel.observationTime}s linear forwards`;
-        }
-
-        startObservationTimer();
-    }, 600);
+    startObservationTimer();
 }
 
 function generateProgressDots() {
@@ -326,12 +303,8 @@ function buildFinalResult() {
 }
 
 function restartGame() {
-    currentQuestionIndex = 0;
-    selectedLayers = [];
-    currentLevel = null;
-
-    phaseComparison.classList.remove('active');
-    phaseWelcome.classList.add('active');
+    // Retourner à la page d'accueil
+    window.location.href = 'index.html';
 }
 
 // ============================================

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackout - Prêt ?</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .ready-card {
+            position: relative;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 4rem 5rem 5rem;
+            max-width: 650px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .ready-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #2d2d2d;
+            margin-bottom: 1rem;
+        }
+
+        .ready-btn {
+            position: absolute;
+            bottom: -22px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-3deg);
+            background: #7C3AED;
+            border: none;
+            color: #ffffff;
+            padding: 0.9rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .ready-btn:hover {
+            transform: translateX(-50%) rotate(-3deg) translateY(-4px);
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5);
+            background: #6D28D9;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="phase-intro" class="phase active">
+        <div class="ready-card">
+            <p class="ready-text">Alors, prêt à jouer ?</p>
+            <button class="ready-btn" onclick="window.location.href='game.html'">C'est parti !</button>
+        </div>
+    </section>
+</body>
+
+</html>
