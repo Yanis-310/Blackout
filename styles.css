@@ -14,6 +14,14 @@
     --font-body: 'Inter', sans-serif;
 }
 
+/* Police PP Editorial New (pour "out" du logo) */
+@font-face {
+    font-family: 'PP Editorial New';
+    src: url('fonts/PPEditorialNew-Italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -26,6 +34,29 @@ body {
     color: var(--color-text);
     min-height: 100vh;
     overflow-x: hidden;
+    /* Transitions de page */
+    opacity: 1;
+    transition: opacity 0.4s ease-out;
+}
+
+body.fade-out {
+    opacity: 0;
+}
+
+body.fade-in {
+    animation: pageEnter 0.5s ease-out forwards;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ============================================
@@ -163,22 +194,22 @@ body {
 /* Logo Blackout */
 .welcome-logo {
     display: flex;
-    align-items: flex-start;
+    align-items: baseline;
     justify-content: center;
     margin-bottom: 0.5rem;
     position: relative;
 }
 
 .logo-black {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 5.5rem;
     font-weight: 700;
-    color: #7C3AED;
+    color: #693CFF;
     letter-spacing: -0.02em;
 }
 
 .logo-out {
-    font-family: 'Playfair Display', serif;
+    font-family: 'PP Editorial New', serif;
     font-size: 5.5rem;
     font-weight: 400;
     font-style: italic;
@@ -188,15 +219,16 @@ body {
 
 /* Image des traits décoratifs à côté du logo */
 .logo-lines-img {
-    width: 55px;
+    width: 50px;
     height: auto;
-    margin-left: 5px;
-    margin-top: -10px;
+    margin-left: 3px;
+    align-self: flex-start;
+    margin-top: -15px;
 }
 
 /* Slogan / Tagline */
 .welcome-tagline {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 1.6rem;
     font-weight: 400;
     color: #2d2d2d;
@@ -210,16 +242,16 @@ body {
     bottom: -22px;
     left: 50%;
     transform: translateX(-50%) rotate(-3deg);
-    background: #7C3AED;
+    background: #693CFF;
     border: none;
     color: #ffffff;
-    padding: 0.8rem 2.5rem;
+    padding: 0.8rem 1.7rem;
     border-radius: 12px;
     font-size: 1.15rem;
-    font-weight: 600;
+    font-weight: 900;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     white-space: nowrap;
     z-index: 10;
 }
@@ -227,12 +259,12 @@ body {
 .start-btn .arrow {
     margin-left: 0.5rem;
     font-weight: 400;
+    font-size: 1.5rem;
 }
 
 .start-btn:hover {
     transform: translateX(-50%) rotate(-3deg) translateY(-4px);
-    box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5);
-    background: #6D28D9;
+    background: #5930E0;
 }
 
 .start-btn:active {

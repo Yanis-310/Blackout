@@ -48,7 +48,6 @@
         <div class="intro-card-large">
             <p class="qr-text">Pour jouer, connecte toi avec ton smartphone en scannant le QR code ci-dessous :</p>
             <div class="qr-code">
-                <!-- QR code placeholder - sera remplacé plus tard -->
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://blackout-game.com"
                     alt="QR Code">
             </div>
@@ -56,10 +55,10 @@
         <p class="intro-hint">appuyer n'importe où pour continuer</p>
     </section>
 
+    <script src="transitions.js"></script>
     <script>
-        // Rediriger vers le jeu au clic n'importe où
         document.addEventListener('click', function () {
-            window.location.href = 'ready.html';
+            navigateTo('ready.html');
         });
     </script>
 </body>

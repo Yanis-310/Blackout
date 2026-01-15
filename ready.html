@@ -34,7 +34,7 @@
             bottom: -22px;
             left: 50%;
             transform: translateX(-50%) rotate(-3deg);
-            background: #7C3AED;
+            background: #693CFF;
             border: none;
             color: #ffffff;
             padding: 0.9rem 2.5rem;
@@ -50,8 +50,8 @@
 
         .ready-btn:hover {
             transform: translateX(-50%) rotate(-3deg) translateY(-4px);
-            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5);
-            background: #6D28D9;
+            box-shadow: 0 15px 40px rgba(105, 60, 255, 0.5);
+            background: #5930E0;
         }
     </style>
 </head>
@@ -60,9 +60,11 @@
     <section id="phase-intro" class="phase active">
         <div class="ready-card">
             <p class="ready-text">Alors, prêt à jouer ?</p>
-            <button class="ready-btn" onclick="window.location.href='game.html'">C'est parti !</button>
+            <button class="ready-btn" onclick="navigateTo('game.html')">C'est parti !</button>
         </div>
     </section>
+
+    <script src="transitions.js"></script>
 </body>
 
 </html>

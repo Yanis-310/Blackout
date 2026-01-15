@@ -303,8 +303,8 @@ function buildFinalResult() {
 }
 
 function restartGame() {
-    // Retourner à la page d'accueil
-    window.location.href = 'index.html';
+    // Retourner à la page d'accueil avec transition
+    navigateTo('index.html');
 }
 
 // ============================================
