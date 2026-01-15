@@ -260,6 +260,7 @@ function showQuestion() {
             type: 'QUESTION_START',
             questionIndex: currentQuestionIndex + 1,
             totalQuestions: currentLevel.questions.length,
+            questionText: question.text,
             choices: choiceLabels
         }));
     }
