@@ -300,6 +300,35 @@ function buildFinalResult() {
         layerImg.className = 'layer';
         userResult.appendChild(layerImg);
     });
+
+    // Mettre à jour les boutons de fin
+    updateEndGameButtons();
+}
+
+function updateEndGameButtons() {
+    const actionsContainer = document.getElementById('end-game-actions');
+    if (!actionsContainer) return;
+
+    actionsContainer.innerHTML = '';
+
+    // Bouton de replay
+    const replayBtn = document.createElement('button');
+    replayBtn.className = 'replay-btn';
+    replayBtn.textContent = 'Rejouer le niveau';
+    replayBtn.onclick = () => window.location.reload();
+    actionsContainer.appendChild(replayBtn);
+
+    // Si on est au niveau 1, ajouter le bouton pour passer au niveau 2
+    if (currentLevel === LEVEL1) {
+        const nextLevelBtn = document.createElement('button');
+        nextLevelBtn.className = 'replay-btn next-level-btn'; // On utilisera le même style de base + modif couleur
+        nextLevelBtn.textContent = 'Passer au niveau suivant';
+        nextLevelBtn.style.background = '#693CFF';
+        nextLevelBtn.style.color = '#fff';
+        nextLevelBtn.style.boxShadow = '0 10px 30px rgba(105, 60, 255, 0.3)';
+        nextLevelBtn.onclick = () => navigateTo('game.html?level=2');
+        actionsContainer.appendChild(nextLevelBtn);
+    }
 }
 
 function restartGame() {

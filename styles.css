@@ -124,9 +124,9 @@ body.fade-in {
 }
 
 .intro-text {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #2d2d2d;
     line-height: 1.4;
 }
@@ -159,8 +159,8 @@ body.fade-in {
     position: relative;
     background: #ffffff;
     border-radius: 40px;
-    padding: 5rem 6rem 6rem;
-    max-width: 780px;
+    padding: 8rem 7rem 7rem;
+    max-width: 1100px;
     width: 90%;
     text-align: center;
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
@@ -170,10 +170,10 @@ body.fade-in {
 /* Image peintre à gauche */
 .welcome-painter {
     position: absolute;
-    left: -8%;
-    bottom: -5%;
-    height: 80%;
-    max-height: 700px;
+    left: 0%;
+    bottom: 0%;
+    height: 68%;
+    max-height: 900px;
     z-index: 2;
     pointer-events: none;
     filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.4));
@@ -182,9 +182,9 @@ body.fade-in {
 /* Image nature morte en haut à droite */
 .welcome-nature-morte {
     position: absolute;
-    top: -60px;
-    right: -15px;
-    width: 280px;
+    top: -70px;
+    right: -10px;
+    width: 325px;
     height: auto;
     z-index: 3;
     pointer-events: none;
@@ -202,7 +202,7 @@ body.fade-in {
 
 .logo-black {
     font-family: 'DM Sans', sans-serif;
-    font-size: 5.5rem;
+    font-size: 8.5rem;
     font-weight: 700;
     color: #693CFF;
     letter-spacing: -0.02em;
@@ -210,7 +210,7 @@ body.fade-in {
 
 .logo-out {
     font-family: 'PP Editorial New', serif;
-    font-size: 5.5rem;
+    font-size: 8.5rem;
     font-weight: 400;
     font-style: italic;
     color: #2d2d2d;
@@ -229,7 +229,7 @@ body.fade-in {
 /* Slogan / Tagline */
 .welcome-tagline {
     font-family: 'DM Sans', sans-serif;
-    font-size: 1.6rem;
+    font-size: 2.2rem;
     font-weight: 400;
     color: #2d2d2d;
     margin-bottom: 3rem;
@@ -247,7 +247,7 @@ body.fade-in {
     color: #ffffff;
     padding: 0.8rem 1.7rem;
     border-radius: 12px;
-    font-size: 1.15rem;
+    font-size: 1.7rem;
     font-weight: 900;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -258,7 +258,7 @@ body.fade-in {
 
 .start-btn .arrow {
     margin-left: 0.5rem;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 1.5rem;
 }
 
@@ -564,6 +564,14 @@ body.fade-in {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.end-game-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
 }
 
 .replay-btn {

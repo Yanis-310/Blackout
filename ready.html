@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blackout - Prêt ?</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -14,7 +14,7 @@
             position: relative;
             background: #ffffff;
             border-radius: 30px;
-            padding: 4rem 5rem 5rem;
+            padding: 3rem 5rem 3rem;
             max-width: 650px;
             width: 90%;
             text-align: center;
@@ -22,7 +22,7 @@
         }
 
         .ready-text {
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', sans-serif;
             font-size: 1.5rem;
             font-weight: 400;
             color: #2d2d2d;
@@ -43,7 +43,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', sans-serif;
             white-space: nowrap;
             z-index: 10;
         }
@@ -60,7 +60,7 @@
     <section id="phase-intro" class="phase active">
         <div class="ready-card">
             <p class="ready-text">Alors, prêt à jouer ?</p>
-            <button class="ready-btn" onclick="navigateTo('game.html')">C'est parti !</button>
+            <button class="ready-btn" onclick="navigateTo('game.html?level=1')">C'est parti !</button>
         </div>
     </section>
 
