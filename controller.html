@@ -5,67 +5,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Manette Blackout</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
+        /* Police PP Editorial New (pour "out" du logo) */
+        @font-face {
+            font-family: 'PP Editorial New';
+            src: url('fonts/PPEditorialNew-Italic.otf') format('opentype');
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background-color: #0a0a0b;
             color: white;
             font-family: 'DM Sans', sans-serif;
-            margin: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 20px;
-            box-sizing: border-box;
+            padding-bottom: 80px;
+            overflow-x: hidden;
         }
 
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        /* ============================================
+           LOGO BLACKOUT
+           ============================================ */
+        .logo-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+        }
+
+        .logo-black {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
             color: #693CFF;
+            letter-spacing: -0.02em;
         }
 
-        .question-info {
-            font-size: 0.9rem;
-            color: #888;
+        .logo-out {
+            font-family: 'PP Editorial New', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            font-style: italic;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-lines-img {
+            width: 20px;
+            height: auto;
+            margin-left: 3px;
+        }
+
+        /* ============================================
+           PROGRESS DOTS
+           ============================================ */
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #2a2a30;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: #693CFF;
+        }
+
+        .progress-dot.completed {
+            background: #693CFF;
+        }
+
+        /* ============================================
+           QUIZ CARD
+           ============================================ */
+        .quiz-card {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 2rem 1.5rem;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .question-title {
+            font-family: 'PP Editorial New', 'DM Sans', serif;
+            font-style: italic;
+            font-size: 1.8rem;
+            color: #2d2d2d;
             margin-bottom: 0.5rem;
         }
 
         .question-text {
+            font-family: 'DM Sans', sans-serif;
             font-size: 1.1rem;
-            color: #fff;
-            text-align: center;
-            margin-bottom: 1.5rem;
+            color: #2d2d2d;
             line-height: 1.4;
-            padding: 0 10px;
+            margin-bottom: 1.5rem;
         }
 
-        .waiting-message {
-            font-size: 1.2rem;
-            color: #888;
-            text-align: center;
-            max-width: 300px;
-            line-height: 1.5;
-        }
-
+        /* ============================================
+           CHOICE BUTTONS
+           ============================================ */
         .buttons-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             width: 100%;
-            max-width: 400px;
         }
 
         .btn-choice {
-            background: #151518;
-            border: 2px solid #2a2a30;
+            background: #693CFF;
+            border: none;
             color: white;
-            padding: 1.2rem;
-            border-radius: 15px;
+            padding: 1rem;
+            border-radius: 12px;
             font-size: 1.1rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             text-align: center;
@@ -74,23 +147,44 @@
         }
 
         .btn-choice:active {
-            background: #693CFF;
-            color: #0a0a0b;
-            transform: scale(0.95);
+            background: #5930E0;
+            transform: scale(0.97);
         }
 
         .btn-choice.selected {
-            background: #693CFF;
-            color: #fff;
-            border-color: #693CFF;
+            background: #4CAF50;
         }
 
-        /* Bouton Suivant pour naviguer dans les consignes */
+        /* ============================================
+           NATURE MORTE
+           ============================================ */
+        .nature-morte-container {
+            margin-top: 25px;
+            width: 180px;
+        }
+
+        .nature-morte-container img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(3px 3px 10px rgba(0, 0, 0, 0.3));
+        }
+
+        /* ============================================
+           NAV PHASE (Consignes)
+           ============================================ */
+        #nav-phase {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
         .btn-next {
             background: #693CFF;
             border: none;
             color: white;
-            padding: 1.5rem 3rem;
+            padding: 1.2rem 2.5rem;
             border-radius: 15px;
             font-size: 1.3rem;
             font-weight: 700;
@@ -98,7 +192,6 @@
             transition: all 0.2s;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            margin-top: 2rem;
         }
 
         .btn-next:active {
@@ -106,7 +199,6 @@
             background: #5930E0;
         }
 
-        /* État "envoyé" du bouton */
         .btn-next.sent {
             background: #4CAF50;
             animation: pulseSuccess 0.5s ease-out;
@@ -126,41 +218,41 @@
             }
         }
 
-        /* Message de confirmation */
-        .nav-instruction.sent {
-            color: #4CAF50;
-            font-weight: 600;
-        }
-
-        .status {
-            position: absolute;
-            bottom: 60px;
-            font-size: 0.8rem;
-            color: #888;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Phase de navigation (consignes) */
-        #nav-phase {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
         .nav-instruction {
             font-size: 1rem;
             color: #888;
             margin-top: 1rem;
         }
 
-        /* Bouton de déconnexion */
+        .nav-instruction.sent {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           WAITING MESSAGE
+           ============================================ */
+        .waiting-message {
+            font-size: 1.1rem;
+            color: #888;
+            text-align: center;
+            max-width: 300px;
+            line-height: 1.5;
+            margin-top: 20px;
+        }
+
+        /* ============================================
+           STATUS & DISCONNECT
+           ============================================ */
+        .status {
+            position: fixed;
+            bottom: 50px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
         .btn-disconnect {
-            position: absolute;
+            position: fixed;
             bottom: 15px;
             background: transparent;
             border: 1px solid #555;
@@ -177,21 +269,50 @@
             border-color: #f44336;
             color: white;
         }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ============================================
+           QUIZ PHASE CONTAINER
+           ============================================ */
+        #quiz-phase {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        #quiz-phase.hidden {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Logo Blackout -->
+    <div class="logo-container">
+        <span class="logo-black">black</span><span class="logo-out">out</span>
+        <img src="assets/logo-lines.png" alt="" class="logo-lines-img">
+    </div>
 
-    <!-- Phase d'attente / Quiz -->
-    <div id="quiz-phase">
-        <h1 id="title">Connecté !</h1>
-        <p class="question-info" id="question-info"></p>
-        <p class="question-text hidden" id="question-text"></p>
+    <!-- Progress Dots -->
+    <div class="progress-dots" id="progress-dots">
+        <!-- Dots will be generated dynamically -->
+    </div>
 
-        <p class="waiting-message" id="waiting-message">Lisez les consignes sur l'écran principal</p>
-
-        <div class="buttons-container hidden" id="buttons-container">
-            <!-- Buttons will be dynamically generated -->
+    <!-- Phase Quiz -->
+    <div id="quiz-phase" class="hidden">
+        <div class="quiz-card">
+            <p class="question-title" id="question-title">Question 1 :</p>
+            <p class="question-text" id="question-text">Quelle est la couleur de l'intérieur du seau ?</p>
+            <div class="buttons-container" id="buttons-container">
+                <!-- Buttons will be dynamically generated -->
+            </div>
+        </div>
+        <div class="nature-morte-container">
+            <img src="assets/nature-morte.png" alt="Nature morte">
         </div>
     </div>
 
@@ -199,6 +320,7 @@
     <div id="nav-phase">
         <button class="btn-next" id="btn-next" onclick="sendNextPage()">Suivant →</button>
         <p class="nav-instruction">Consigne suivante</p>
+        <p class="waiting-message" id="waiting-message">Lisez les consignes sur l'écran principal</p>
     </div>
 
     <div class="status" id="status">Déconnecté</div>
@@ -210,29 +332,40 @@
         let ws;
         let hasAnswered = false;
         let currentPhase = 'nav'; // 'nav' pour navigation, 'quiz' pour les questions
+        let totalQuestions = 0;
+        let currentQuestionIndex = 0;
 
         // Séquence des pages de consignes sur le PC
         const pageSequence = ['intro.html', 'consignes.html', 'consignes2.html', 'ready.html', 'game.html?level=1'];
         let currentPageIndex = 0;
         let manualDisconnect = false;
 
+        function generateProgressDots(total, current) {
+            const container = document.getElementById('progress-dots');
+            container.innerHTML = '';
+            for (let i = 0; i < total; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (i < current) dot.classList.add('completed');
+                if (i === current) dot.classList.add('active');
+                container.appendChild(dot);
+            }
+        }
+
         function disconnect() {
             if (ws) {
                 manualDisconnect = true;
                 if (navigator.vibrate) navigator.vibrate(50);
 
-                // Envoyer au PC de retourner à la page d'accueil (si connexion ouverte)
                 if (ws.readyState === WebSocket.OPEN) {
                     ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'index.html' }));
                 }
 
                 ws.close();
-                document.getElementById('title').textContent = 'Déconnecté';
-                document.getElementById('title').style.color = '#888';
+                document.getElementById('quiz-phase').classList.add('hidden');
+                document.getElementById('nav-phase').classList.add('hidden');
                 document.getElementById('waiting-message').textContent = 'Vous avez quitté la session. Rafraîchissez la page pour vous reconnecter.';
                 document.getElementById('waiting-message').classList.remove('hidden');
-                document.getElementById('buttons-container').classList.add('hidden');
-                document.getElementById('nav-phase').classList.add('hidden');
                 document.getElementById('btn-disconnect').classList.add('hidden');
                 document.getElementById('status').textContent = 'Déconnecté';
                 document.getElementById('status').style.color = '#888';
@@ -245,8 +378,6 @@
             ws.onopen = () => {
                 document.getElementById('status').textContent = 'Connecté';
                 document.getElementById('status').style.color = '#4CAF50';
-
-                // Notifier le PC que le téléphone est connecté
                 ws.send(JSON.stringify({ type: 'PHONE_CONNECTED' }));
             };
 
@@ -255,22 +386,25 @@
                     const data = JSON.parse(event.data);
 
                     if (data.type === 'QUESTION_START') {
-                        // Passer en mode quiz
                         currentPhase = 'quiz';
+                        totalQuestions = data.totalQuestions;
+                        currentQuestionIndex = data.questionIndex - 1;
+
+                        // Afficher le quiz et masquer la navigation
                         document.getElementById('nav-phase').classList.add('hidden');
                         document.getElementById('quiz-phase').classList.remove('hidden');
+                        document.getElementById('progress-dots').classList.remove('hidden');
 
-                        document.getElementById('title').textContent = 'Ta réponse ?';
-                        document.getElementById('question-info').textContent =
-                            `Question ${data.questionIndex} / ${data.totalQuestions}`;
+                        // Mettre à jour les progress dots
+                        generateProgressDots(totalQuestions, currentQuestionIndex);
+
+                        // Mettre à jour la question
+                        document.getElementById('question-title').textContent = `Question ${data.questionIndex} :`;
                         document.getElementById('question-text').textContent = data.questionText || '';
-                        document.getElementById('question-text').classList.remove('hidden');
-                        document.getElementById('waiting-message').classList.add('hidden');
 
+                        // Générer les boutons de choix
                         const container = document.getElementById('buttons-container');
-                        container.classList.remove('hidden');
                         container.innerHTML = '';
-
                         hasAnswered = false;
 
                         data.choices.forEach((label, index) => {
@@ -283,29 +417,22 @@
                     }
 
                     if (data.type === 'PHONE_REJECTED') {
-                        // Un autre téléphone est déjà connecté
-                        document.getElementById('title').textContent = 'Connexion refusée';
-                        document.getElementById('title').style.color = '#f44336';
-                        document.getElementById('waiting-message').textContent = data.reason || 'Un autre téléphone est déjà connecté. Veuillez attendre que la session en cours se termine.';
-                        document.getElementById('waiting-message').classList.remove('hidden');
-                        document.getElementById('buttons-container').classList.add('hidden');
+                        document.getElementById('quiz-phase').classList.add('hidden');
                         document.getElementById('nav-phase').classList.add('hidden');
+                        document.getElementById('waiting-message').textContent = data.reason || 'Un autre téléphone est déjà connecté.';
+                        document.getElementById('waiting-message').classList.remove('hidden');
                         document.getElementById('status').textContent = 'Refusé';
                         document.getElementById('status').style.color = '#f44336';
-                        // Ne pas tenter de se reconnecter automatiquement
                         ws.onclose = null;
                         return;
                     }
 
                     if (data.type === 'GAME_END') {
-                        document.getElementById('title').textContent = 'Bravo !';
-                        document.getElementById('question-info').textContent = '';
-                        document.getElementById('question-text').classList.add('hidden');
-                        document.getElementById('waiting-message').classList.add('hidden');
+                        document.getElementById('question-title').textContent = 'Bravo !';
+                        document.getElementById('question-text').textContent = `Score : ${data.score}%`;
+                        document.getElementById('progress-dots').classList.add('hidden');
 
-                        // Afficher les boutons de fin de jeu
                         const container = document.getElementById('buttons-container');
-                        container.classList.remove('hidden');
                         container.innerHTML = '';
 
                         // Bouton Rejouer
@@ -318,13 +445,9 @@
                         };
                         container.appendChild(replayBtn);
 
-                        // Bouton Niveau suivant (si niveau 1)
                         if (data.level === 1) {
                             const nextBtn = document.createElement('div');
                             nextBtn.className = 'btn-choice';
-                            nextBtn.style.background = '#693CFF';
-                            nextBtn.style.color = '#fff';
-                            nextBtn.style.borderColor = '#693CFF';
                             nextBtn.textContent = 'Niveau suivant';
                             nextBtn.onclick = () => {
                                 if (navigator.vibrate) navigator.vibrate(50);
@@ -333,7 +456,6 @@
                             container.appendChild(nextBtn);
                         }
 
-                        // Bouton Accueil (si niveau 2)
                         if (data.level === 2) {
                             const homeBtn = document.createElement('div');
                             homeBtn.className = 'btn-choice';
@@ -351,10 +473,7 @@
             };
 
             ws.onclose = () => {
-                if (manualDisconnect) {
-                    // Déconnexion manuelle, ne pas se reconnecter
-                    return;
-                }
+                if (manualDisconnect) return;
                 document.getElementById('status').textContent = 'Déconnecté - Reconnexion...';
                 document.getElementById('status').style.color = '#f44336';
                 setTimeout(connect, 3000);
@@ -370,41 +489,31 @@
             if (ws && ws.readyState === WebSocket.OPEN) {
                 const btn = document.getElementById('btn-next');
                 const instruction = document.querySelector('.nav-instruction');
-                const originalText = btn.textContent;
-                const originalInstruction = instruction.textContent;
 
-                // Vibration feedback
                 if (navigator.vibrate) navigator.vibrate(50);
 
-                // Feedback visuel immédiat - montrer que l'action est envoyée
                 btn.textContent = 'Consigne lue ✓';
                 btn.classList.add('sent');
                 instruction.textContent = 'Chargement...';
                 instruction.classList.add('sent');
 
-                // Envoyer le signal pour passer à la page suivante
                 const targetPage = pageSequence[currentPageIndex];
                 ws.send(JSON.stringify({
                     type: 'NEXT_PAGE',
                     target: targetPage
                 }));
 
-                // Passer à la page suivante dans la séquence
                 currentPageIndex++;
 
-                // Après un court délai, remettre le bouton à son état normal ou le masquer
                 setTimeout(() => {
                     btn.classList.remove('sent');
                     instruction.classList.remove('sent');
 
-                    // Si on a dépassé ready.html, le jeu va commencer
                     if (currentPageIndex >= pageSequence.length) {
                         document.getElementById('waiting-message').textContent = 'Observez bien le tableau...';
-                        document.getElementById('waiting-message').classList.remove('hidden');
                         btn.classList.add('hidden');
                         instruction.classList.add('hidden');
                     } else {
-                        // Mettre à jour le texte selon l'étape
                         updateNavText();
                     }
                 }, 800);
@@ -415,12 +524,10 @@
             const btn = document.getElementById('btn-next');
             const instruction = document.querySelector('.nav-instruction');
 
-            // Dernière étape avant le jeu (ready.html -> game.html)
             if (currentPageIndex === pageSequence.length - 1) {
                 btn.textContent = 'Commencer';
                 instruction.textContent = 'Observez bien le tableau !';
             } else {
-                // Remettre le texte par défaut
                 btn.textContent = 'Suivant →';
                 instruction.textContent = 'Consigne suivante';
             }
