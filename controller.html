@@ -211,6 +211,21 @@
                         });
                     }
 
+                    if (data.type === 'PHONE_REJECTED') {
+                        // Un autre téléphone est déjà connecté
+                        document.getElementById('title').textContent = 'Connexion refusée';
+                        document.getElementById('title').style.color = '#f44336';
+                        document.getElementById('waiting-message').textContent = data.reason || 'Un autre téléphone est déjà connecté. Veuillez attendre que la session en cours se termine.';
+                        document.getElementById('waiting-message').classList.remove('hidden');
+                        document.getElementById('buttons-container').classList.add('hidden');
+                        document.getElementById('nav-phase').classList.add('hidden');
+                        document.getElementById('status').textContent = 'Refusé';
+                        document.getElementById('status').style.color = '#f44336';
+                        // Ne pas tenter de se reconnecter automatiquement
+                        ws.onclose = null;
+                        return;
+                    }
+
                     if (data.type === 'GAME_END') {
                         document.getElementById('title').textContent = 'Bravo !';
                         document.getElementById('question-info').textContent = '';
