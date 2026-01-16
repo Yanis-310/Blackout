@@ -33,7 +33,7 @@ const LEVEL1 = {
     ]
 };
 
-// LEVEL 2 - Tableau Eugène Buland (10 questions)
+// LEVEL 2 - Tableau Eugène Buland (10 questions
 const LEVEL2 = {
     name: "Tableau Buland",
     observationTime: 15,
