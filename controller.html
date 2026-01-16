@@ -46,6 +46,8 @@
             font-size: 1.2rem;
             color: #888;
             text-align: center;
+            max-width: 300px;
+            line-height: 1.5;
         }
 
         .buttons-container {
@@ -83,6 +85,27 @@
             border-color: #693CFF;
         }
 
+        /* Bouton Suivant pour naviguer dans les consignes */
+        .btn-next {
+            background: #693CFF;
+            border: none;
+            color: white;
+            padding: 1.5rem 3rem;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            margin-top: 2rem;
+        }
+
+        .btn-next:active {
+            transform: scale(0.95);
+            background: #5930E0;
+        }
+
         .status {
             position: absolute;
             bottom: 20px;
@@ -93,19 +116,43 @@
         .hidden {
             display: none !important;
         }
+
+        /* Phase de navigation (consignes) */
+        #nav-phase {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .nav-instruction {
+            font-size: 1rem;
+            color: #888;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 
 <body>
 
-    <h1 id="title">En attente...</h1>
-    <p class="question-info" id="question-info"></p>
-    <p class="question-text" id="question-text"></p>
+    <!-- Phase d'attente / Quiz -->
+    <div id="quiz-phase">
+        <h1 id="title">Connecté !</h1>
+        <p class="question-info" id="question-info"></p>
+        <p class="question-text hidden" id="question-text"></p>
 
-    <p class="waiting-message" id="waiting-message">Connecté ! En attente du démarrage du jeu...</p>
+        <p class="waiting-message" id="waiting-message">Appuyez sur le bouton ci-dessous pour commencer</p>
 
-    <div class="buttons-container hidden" id="buttons-container">
-        <!-- Buttons will be dynamically generated -->
+        <div class="buttons-container hidden" id="buttons-container">
+            <!-- Buttons will be dynamically generated -->
+        </div>
+    </div>
+
+    <!-- Phase de navigation (bouton Suivant) -->
+    <div id="nav-phase">
+        <button class="btn-next" id="btn-next" onclick="sendNextPage()">Suivant →</button>
+        <p class="nav-instruction">Appuyez pour continuer sur l'écran principal</p>
     </div>
 
     <div class="status" id="status">Déconnecté</div>
@@ -115,6 +162,11 @@
         const wsUrl = protocol + '//' + window.location.host;
         let ws;
         let hasAnswered = false;
+        let currentPhase = 'nav'; // 'nav' pour navigation, 'quiz' pour les questions
+
+        // Séquence des pages de consignes sur le PC
+        const pageSequence = ['intro.html', 'consignes.html', 'consignes2.html', 'ready.html'];
+        let currentPageIndex = 0;
 
         function connect() {
             ws = new WebSocket(wsUrl);
@@ -122,6 +174,9 @@
             ws.onopen = () => {
                 document.getElementById('status').textContent = 'Connecté';
                 document.getElementById('status').style.color = '#4CAF50';
+
+                // Notifier le PC que le téléphone est connecté
+                ws.send(JSON.stringify({ type: 'PHONE_CONNECTED' }));
             };
 
             ws.onmessage = (event) => {
@@ -129,7 +184,11 @@
                     const data = JSON.parse(event.data);
 
                     if (data.type === 'QUESTION_START') {
-                        // Show question UI
+                        // Passer en mode quiz
+                        currentPhase = 'quiz';
+                        document.getElementById('nav-phase').classList.add('hidden');
+                        document.getElementById('quiz-phase').classList.remove('hidden');
+
                         document.getElementById('title').textContent = 'Ta réponse ?';
                         document.getElementById('question-info').textContent =
                             `Question ${data.questionIndex} / ${data.totalQuestions}`;
@@ -155,6 +214,7 @@
                     if (data.type === 'GAME_END') {
                         document.getElementById('title').textContent = 'Bravo !';
                         document.getElementById('question-info').textContent = '';
+                        document.getElementById('question-text').classList.add('hidden');
                         document.getElementById('buttons-container').classList.add('hidden');
                         document.getElementById('waiting-message').textContent = 'Le jeu est terminé !';
                         document.getElementById('waiting-message').classList.remove('hidden');
@@ -176,17 +236,40 @@
             };
         }
 
+        function sendNextPage() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                // Vibration feedback
+                if (navigator.vibrate) navigator.vibrate(50);
+
+                // Envoyer le signal pour passer à la page suivante
+                const targetPage = pageSequence[currentPageIndex];
+                ws.send(JSON.stringify({
+                    type: 'NEXT_PAGE',
+                    target: targetPage
+                }));
+
+                // Passer à la page suivante dans la séquence
+                currentPageIndex++;
+
+                // Si on a dépassé ready.html, le jeu va commencer
+                if (currentPageIndex >= pageSequence.length) {
+                    document.getElementById('waiting-message').textContent = 'Le jeu va commencer...';
+                    document.getElementById('waiting-message').classList.remove('hidden');
+                    document.getElementById('btn-next').classList.add('hidden');
+                    document.querySelector('.nav-instruction').classList.add('hidden');
+                }
+            }
+        }
+
         function sendAnswer(index) {
-            if (hasAnswered) return; // Prevent double-tap
+            if (hasAnswered) return;
             if (ws && ws.readyState === WebSocket.OPEN) {
                 hasAnswered = true;
 
-                // Vibration feedback
                 if (navigator.vibrate) navigator.vibrate(50);
 
                 ws.send(JSON.stringify({ type: 'ANSWER', value: index }));
 
-                // Visual feedback - mark as selected
                 const btns = document.querySelectorAll('.btn-choice');
                 btns.forEach((btn, i) => {
                     if (i === index) {

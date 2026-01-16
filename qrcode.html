@@ -32,7 +32,7 @@
         .qr-code {
             width: 180px;
             height: 180px;
-            margin: 0 auto;
+            margin: 0 auto 1.5rem;
         }
 
         .qr-code img {
@@ -40,38 +40,102 @@
             height: 100%;
             object-fit: contain;
         }
+
+        .connection-status {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: #888;
+            margin-top: 1rem;
+        }
+
+        .connection-status.connected {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .waiting-dots::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: '.';
+            }
+
+            40% {
+                content: '..';
+            }
+
+            60%,
+            100% {
+                content: '...';
+            }
+        }
     </style>
 </head>
 
 <body>
     <section id="phase-intro" class="phase active">
         <div class="intro-card-large">
-            <p class="qr-text">Pour jouer, connecte toi avec ton smartphone en scannant le QR code ci-dessous :</p>
+            <p class="qr-text">Pour jouer, scanne ce QR code avec ton smartphone :</p>
             <div class="qr-code">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://blackout-game.com"
                     alt="QR Code">
             </div>
+            <p class="connection-status" id="connection-status">
+                <span class="waiting-dots">En attente de connexion</span>
+            </p>
         </div>
-        <p class="intro-hint">appuyer n'importe où pour continuer</p>
     </section>
 
     <script src="transitions.js"></script>
     <script>
-        // Génération dynamique du QR Code basé sur l'URL actuelle
-        // Fonctionne en local ET sur Render/cloud
+        // Génération dynamique du QR Code
         const baseUrl = window.location.origin;
         const controllerUrl = `${baseUrl}/controller.html`;
-
-        console.log('Controller URL:', controllerUrl);
 
         const qrImg = document.querySelector('.qr-code img');
         if (qrImg) {
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(controllerUrl)}`;
         }
 
-        document.addEventListener('click', function () {
-            navigateTo('ready.html');
-        });
+        // Connexion WebSocket pour détecter la connexion du téléphone
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = protocol + '//' + window.location.host;
+        let ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+            console.log('PC connecté au serveur WS');
+        };
+
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+
+                // Le téléphone a appuyé sur "Suivant"
+                if (data.type === 'PHONE_CONNECTED') {
+                    document.getElementById('connection-status').innerHTML = '✓ Téléphone connecté !';
+                    document.getElementById('connection-status').classList.add('connected');
+                }
+
+                // Le téléphone demande de passer à la page suivante
+                if (data.type === 'NEXT_PAGE') {
+                    navigateTo(data.target || 'intro.html');
+                }
+            } catch (e) {
+                console.error('Erreur message:', e);
+            }
+        };
+
+        ws.onclose = () => {
+            console.log('WS déconnecté, reconnexion...');
+            setTimeout(() => {
+                ws = new WebSocket(wsUrl);
+            }, 3000);
+        };
     </script>
 </body>
 

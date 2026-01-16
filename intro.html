@@ -16,14 +16,30 @@
         <div class="intro-card">
             <p class="intro-text">Aujourd'hui, on met à l'épreuve votre mémoire !</p>
         </div>
-        <p class="intro-hint">appuyer n'importe où pour continuer</p>
+        <p class="intro-hint">Attendez le signal du téléphone...</p>
     </section>
 
     <script src="transitions.js"></script>
     <script>
-        document.addEventListener('click', function () {
-            navigateTo('consignes.html');
-        });
+        // Connexion WebSocket pour recevoir les signaux du téléphone
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = protocol + '//' + window.location.host;
+        let ws = new WebSocket(wsUrl);
+
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === 'NEXT_PAGE') {
+                    navigateTo(data.target || 'consignes.html');
+                }
+            } catch (e) {
+                console.error('Erreur:', e);
+            }
+        };
+
+        ws.onclose = () => {
+            setTimeout(() => { ws = new WebSocket(wsUrl); }, 3000);
+        };
     </script>
 </body>
 

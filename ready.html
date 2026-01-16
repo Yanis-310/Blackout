@@ -29,29 +29,10 @@
             margin-bottom: 1rem;
         }
 
-        .ready-btn {
-            position: absolute;
-            bottom: -22px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-3deg);
-            background: #693CFF;
-            border: none;
-            color: #ffffff;
-            padding: 0.9rem 2.5rem;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .ready-subtitle {
             font-family: 'DM Sans', sans-serif;
-            white-space: nowrap;
-            z-index: 10;
-        }
-
-        .ready-btn:hover {
-            transform: translateX(-50%) rotate(-3deg) translateY(-4px);
-            box-shadow: 0 15px 40px rgba(105, 60, 255, 0.5);
-            background: #5930E0;
+            font-size: 1rem;
+            color: #888;
         }
     </style>
 </head>
@@ -60,11 +41,32 @@
     <section id="phase-intro" class="phase active">
         <div class="ready-card">
             <p class="ready-text">Alors, prêt à jouer ?</p>
-            <button class="ready-btn" onclick="navigateTo('game.html?level=1')">C'est parti !</button>
+            <p class="ready-subtitle">Appuyez sur "Suivant" sur votre téléphone pour commencer !</p>
         </div>
     </section>
 
     <script src="transitions.js"></script>
+    <script>
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = protocol + '//' + window.location.host;
+        let ws = new WebSocket(wsUrl);
+
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === 'NEXT_PAGE') {
+                    // Lancer le jeu!
+                    navigateTo('game.html?level=1');
+                }
+            } catch (e) {
+                console.error('Erreur:', e);
+            }
+        };
+
+        ws.onclose = () => {
+            setTimeout(() => { ws = new WebSocket(wsUrl); }, 3000);
+        };
+    </script>
 </body>
 
 </html>
