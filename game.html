@@ -32,27 +32,26 @@
          PHASE 2: CONSTRUCTION (QUIZ)
          ============================================ -->
     <section id="phase-construction" class="phase">
-        <div class="painter-section">
-            <img src="assets/peintre.png" alt="Le Peintre" class="painter-avatar">
-            <div class="painter-bubble">
-                <p class="painter-name">Le Maître</p>
-                <p>Aidez-moi à reconstituer mon tableau ! Répondez à ces questions de mémoire...</p>
+        <!-- Conteneur principal de la question -->
+        <div class="quiz-card">
+            <!-- Bulle violette avec numéro de question -->
+            <div class="question-number-bubble">
+                <span id="current-question" class="question-number">1</span>.
             </div>
-        </div>
 
-        <div class="construction-header">
-            <h1 class="construction-title">Reconstruisez le tableau</h1>
-            <p class="question-counter">Question <span id="current-question">1</span>/<span
-                    id="total-questions">3</span></p>
-            <div id="question-progress" class="question-progress-container">
+            <!-- Barre de progression chainée -->
+            <div id="question-progress" class="progress-chain">
                 <!-- Les dots sont générés dynamiquement par JS -->
             </div>
+
+            <!-- Zone de question blanche -->
+            <div class="question-box">
+                <p id="question-text" class="question-text"></p>
+            </div>
         </div>
 
-        <div class="question-container">
-            <p id="question-text" class="question-text"></p>
-            <div id="choices" class="choices"></div>
-        </div>
+        <!-- Boutons de réponse (en dehors de la carte) -->
+        <div id="choices" class="choices"></div>
     </section>
 
     <!-- ============================================
@@ -61,6 +60,12 @@
     <section id="phase-comparison" class="phase">
         <h1 class="comparison-title">Comparaison</h1>
         <p class="comparison-subtitle">Votre reconstruction vs le tableau original</p>
+
+        <!-- Score en pourcentage -->
+        <div class="score-display">
+            <span class="score-value" id="score-value">0%</span>
+            <span class="score-label">de fidélité</span>
+        </div>
 
         <div class="comparison-container">
             <div class="comparison-side">

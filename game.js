@@ -13,6 +13,7 @@ const LEVEL1 = {
     questions: [
         {
             text: "La fille portait-elle un ruban ?",
+            correctIndex: 0,
             choices: [
                 { label: "Oui", image: "assets/fille-avec-ruban.png" },
                 { label: "Non", image: "assets/fille-sans-ruban.png" }
@@ -20,6 +21,7 @@ const LEVEL1 = {
         },
         {
             text: "Combien de tableaux y avait-il au mur ?",
+            correctIndex: 1,
             choices: [
                 { label: "Deux", image: "assets/version-2tableaux.png" },
                 { label: "Trois", image: "assets/version-3tableaux.png" }
@@ -27,6 +29,7 @@ const LEVEL1 = {
         },
         {
             text: "De quelle couleur était l'ours sur la caisse?",
+            correctIndex: 1,
             choices: [
                 { label: "Marron", image: "assets/ours-noir.png" },
                 { label: "Blanc", image: "assets/ours-blanc.png" }
@@ -35,7 +38,7 @@ const LEVEL1 = {
     ]
 };
 
-// LEVEL 2 - Tableau Eugène Buland (10 questions)
+// LEVEL 2 - Tableau Eugène Buland (12 questions)
 const LEVEL2 = {
     name: "Tableau Buland",
     title: "Les héritiers",
@@ -46,6 +49,7 @@ const LEVEL2 = {
     questions: [
         {
             text: "Quelle était la couleur des rideaux ?",
+            correctIndex: 0,
             choices: [
                 { label: "Noir", image: "assets/level2/q1-rideaux-noir.png" },
                 { label: "Blanc", image: "assets/level2/q1-rideaux-blanc.png" },
@@ -54,6 +58,7 @@ const LEVEL2 = {
         },
         {
             text: "De quelle couleur est le poster accroché sur le mur du fond ?",
+            correctIndex: 0,
             choices: [
                 { label: "Orange", image: "assets/level2/q2-poster-orange.png" },
                 { label: "Jaune", image: "assets/level2/q2-poster-jaune.png" },
@@ -62,6 +67,7 @@ const LEVEL2 = {
         },
         {
             text: "Quel est le nombre de personnes dans la pièce ?",
+            correctIndex: 0,
             choices: [
                 { label: "5", image: "assets/level2/q3-personnes-5.png" },
                 { label: "4", image: "assets/level2/q3-personnes-4.png" }
@@ -69,6 +75,7 @@ const LEVEL2 = {
         },
         {
             text: "Combien de personnes vous regardent ?",
+            correctIndex: 0,
             choices: [
                 { label: "1", image: "assets/level2/q9-regard-1.png" },
                 { label: "2", image: "assets/level2/q9-regard-2.png" },
@@ -77,6 +84,7 @@ const LEVEL2 = {
         },
         {
             text: "Combien de personnes possèdent un couvre-chef ?",
+            correctIndex: 0,
             choices: [
                 { label: "3", image: "assets/level2/q4-couvrechef-2.png" },
                 { label: "2", image: "assets/level2/q4-couvrechef-1.png" },
@@ -85,6 +93,7 @@ const LEVEL2 = {
         },
         {
             text: "Quel élément retrouve-t-on sur le rebord de la fenêtre ?",
+            correctIndex: 0,
             choices: [
                 { label: "Une bouteille", image: "assets/level2/q5-fenetre-bouteille.png" },
                 { label: "Une bougie", image: "assets/level2/q5-fenetre-bougie.png" },
@@ -93,6 +102,7 @@ const LEVEL2 = {
         },
         {
             text: "Quel objet est présent sur le coin de la table ?",
+            correctIndex: 0,
             choices: [
                 { label: "Une boîte d'allumettes", image: "assets/level2/q6-table-allumettes.png" },
                 { label: "Un pot d'encre", image: "assets/level2/q6-table-encre.png" },
@@ -101,6 +111,7 @@ const LEVEL2 = {
         },
         {
             text: "Quel est le nombre de bougies sur la table ?",
+            correctIndex: 0,
             choices: [
                 { label: "2", image: "assets/level2/q7-bougies-2.png" },
                 { label: "1", image: "assets/level2/q7-bougies-1.png" },
@@ -109,6 +120,7 @@ const LEVEL2 = {
         },
         {
             text: "Combien de cadres y a-t-il au sol ?",
+            correctIndex: 0,
             choices: [
                 { label: "2", image: "assets/level2/q-miroirs-2.png" },
                 { label: "1", image: "assets/level2/q-miroirs-1.png" },
@@ -117,6 +129,7 @@ const LEVEL2 = {
         },
         {
             text: "Quelle est la couleur de l'intérieur du seau ?",
+            correctIndex: 0,
             choices: [
                 { label: "Cuivre", image: "assets/level2/q8-seau-cuivre.png" },
                 { label: "Argenté", image: "assets/level2/q8-seau-argente.png" },
@@ -125,6 +138,7 @@ const LEVEL2 = {
         },
         {
             text: "Couleur de l'intérieur du coffre sur la gauche ?",
+            correctIndex: 0,
             choices: [
                 { label: "Rouge", image: "assets/level2/q9-etagere-rouge.png" },
                 { label: "Jaune", image: "assets/level2/q9-etagere-jaune.png" },
@@ -133,6 +147,7 @@ const LEVEL2 = {
         },
         {
             text: "Quel objet l'homme à droite du tableau tient-il dans sa main ?",
+            correctIndex: 0,
             choices: [
                 { label: "Canne", image: "assets/level2/q10-main-canne.png" },
                 { label: "Parapluie", image: "assets/level2/q10-main-parapluie.png" },
@@ -148,6 +163,7 @@ const LEVEL2 = {
 let currentLevel = null;
 let currentQuestionIndex = 0;
 let selectedLayers = [];
+let score = 0; // Nombre de bonnes réponses
 let ws = null; // WebSocket connection
 
 // ============================================
@@ -174,6 +190,11 @@ const paintingAuthor = document.getElementById('painting-author');
 function initGame() {
     // Connexion WebSocket
     connectWS();
+
+    // Réinitialiser l'état du jeu
+    currentQuestionIndex = 0;
+    selectedLayers = [];
+    score = 0;
 
     // Récupérer le niveau depuis l'URL ou utiliser LEVEL1 par défaut
     const urlParams = new URLSearchParams(window.location.search);
@@ -213,10 +234,18 @@ function generateProgressDots() {
 
     questionProgress.innerHTML = '';
     for (let i = 0; i < currentLevel.questions.length; i++) {
+        // Ajouter le point
         const dot = document.createElement('div');
-        dot.className = 'question-progress-dot';
+        dot.className = 'chain-dot';
         if (i === 0) dot.classList.add('active');
         questionProgress.appendChild(dot);
+
+        // Ajouter le lien entre les points (sauf après le dernier)
+        if (i < currentLevel.questions.length - 1) {
+            const link = document.createElement('div');
+            link.className = 'chain-link';
+            questionProgress.appendChild(link);
+        }
     }
 }
 
@@ -276,7 +305,9 @@ function showQuestion() {
 }
 
 function updateProgressBar() {
-    const dots = document.querySelectorAll('.question-progress-dot');
+    const dots = document.querySelectorAll('.chain-dot');
+    const links = document.querySelectorAll('.chain-link');
+
     dots.forEach((dot, index) => {
         dot.classList.remove('active', 'completed');
         if (index < currentQuestionIndex) {
@@ -285,11 +316,23 @@ function updateProgressBar() {
             dot.classList.add('active');
         }
     });
+
+    links.forEach((link, index) => {
+        link.classList.remove('completed');
+        if (index < currentQuestionIndex) {
+            link.classList.add('completed');
+        }
+    });
 }
 
 function selectChoice(choiceIndex) {
     const question = currentLevel.questions[currentQuestionIndex];
     const selectedImage = question.choices[choiceIndex].image;
+
+    // Vérifier si la réponse est correcte
+    if (choiceIndex === question.correctIndex) {
+        score++;
+    }
 
     selectedLayers.push(selectedImage);
     currentQuestionIndex++;
@@ -327,6 +370,14 @@ function buildFinalResult() {
         userResult.appendChild(layerImg);
     });
 
+    // Afficher le score en pourcentage
+    const totalQuestions = currentLevel.questions.length;
+    const percentage = Math.round((score / totalQuestions) * 100);
+    const scoreValueEl = document.getElementById('score-value');
+    if (scoreValueEl) {
+        scoreValueEl.textContent = percentage + '%';
+    }
+
     // Mettre à jour les boutons de fin
     updateEndGameButtons();
 }
@@ -347,13 +398,26 @@ function updateEndGameButtons() {
     // Si on est au niveau 1, ajouter le bouton pour passer au niveau 2
     if (currentLevel === LEVEL1) {
         const nextLevelBtn = document.createElement('button');
-        nextLevelBtn.className = 'replay-btn next-level-btn'; // On utilisera le même style de base + modif couleur
+        nextLevelBtn.className = 'replay-btn next-level-btn';
         nextLevelBtn.textContent = 'Passer au niveau suivant';
         nextLevelBtn.style.background = '#693CFF';
         nextLevelBtn.style.color = '#fff';
         nextLevelBtn.style.boxShadow = '0 10px 30px rgba(105, 60, 255, 0.3)';
         nextLevelBtn.onclick = () => navigateTo('game.html?level=2');
         actionsContainer.appendChild(nextLevelBtn);
+    }
+
+    // Si on est au niveau 2, ajouter le bouton pour revenir à l'accueil
+    if (currentLevel === LEVEL2) {
+        const homeBtn = document.createElement('button');
+        homeBtn.className = 'replay-btn home-btn';
+        homeBtn.textContent = 'Retour à l\'accueil';
+        homeBtn.style.background = 'transparent';
+        homeBtn.style.border = '2px solid #693CFF';
+        homeBtn.style.color = '#693CFF';
+        homeBtn.style.boxShadow = 'none';
+        homeBtn.onclick = () => navigateTo('index.html');
+        actionsContainer.appendChild(homeBtn);
     }
 }
 
