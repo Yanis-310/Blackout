@@ -40,32 +40,69 @@
         .logo-container {
             margin-top: 20px;
             margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-wrapper {
+            position: relative;
             display: flex;
             align-items: baseline;
-            justify-content: center;
+        }
+
+        /* Texte violet en arrière-plan (ombre décalée) */
+        .logo-shadow {
+            position: absolute;
+            top: 4px;
+            left: 2px;
+            display: flex;
+            align-items: baseline;
+            z-index: 1;
+        }
+
+        .logo-shadow .logo-black,
+        .logo-shadow .logo-out {
+            color: #693CFF;
+        }
+
+        /* Texte blanc au premier plan */
+        .logo-front {
+            position: relative;
+            display: flex;
+            align-items: baseline;
+            z-index: 2;
+        }
+
+        .logo-front .logo-black,
+        .logo-front .logo-out {
+            color: #ffffff;
         }
 
         .logo-black {
             font-family: 'DM Sans', sans-serif;
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            color: #693CFF;
             letter-spacing: -0.02em;
         }
 
         .logo-out {
             font-family: 'PP Editorial New', serif;
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 400;
             font-style: italic;
-            color: #ffffff;
             letter-spacing: -0.02em;
         }
 
         .logo-lines-img {
-            width: 20px;
+            width: 25px;
             height: auto;
-            margin-left: 3px;
+            margin-left: 2px;
+            position: relative;
+            z-index: 2;
+            align-self: flex-start;
+            margin-top: -5px;
         }
 
         /* ============================================
@@ -291,9 +328,18 @@
 </head>
 
 <body>
-    <!-- Logo Blackout -->
+    <!-- Logo Blackout avec effet d'ombre -->
     <div class="logo-container">
-        <span class="logo-black">black</span><span class="logo-out">out</span>
+        <div class="logo-wrapper">
+            <!-- Ombre violet décalée en arrière-plan -->
+            <div class="logo-shadow">
+                <span class="logo-black">black</span><span class="logo-out">out</span>
+            </div>
+            <!-- Texte blanc au premier plan -->
+            <div class="logo-front">
+                <span class="logo-black">black</span><span class="logo-out">out</span>
+            </div>
+        </div>
         <img src="assets/logo-lines.png" alt="" class="logo-lines-img">
     </div>
 
