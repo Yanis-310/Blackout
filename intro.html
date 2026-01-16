@@ -9,78 +9,14 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Animation de pulsation quand le signal est reçu */
-        @keyframes cardPulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
-            }
-
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 30px 100px rgba(105, 60, 255, 0.6);
-            }
-
-            100% {
-                transform: scale(1);
-                box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
-            }
-        }
-
-        @keyframes flashOverlay {
-            0% {
-                opacity: 0;
-            }
-
-            30% {
-                opacity: 0.4;
-            }
-
-            100% {
-                opacity: 0;
-            }
-        }
-
-        .intro-card.signal-received {
-            animation: cardPulse 0.5s ease-out;
-            border: 3px solid #693CFF;
-        }
-
-        /* Flash lumineux sur tout l'écran */
-        .flash-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(105, 60, 255, 0.6) 0%, transparent 70%);
-            pointer-events: none;
-            opacity: 0;
-            z-index: 1000;
-        }
-
-        .flash-overlay.active {
-            animation: flashOverlay 0.6s ease-out forwards;
-        }
-
-        /* Texte indicateur qui change */
-        .intro-hint.signal-received {
-            color: #693CFF;
-            font-weight: 600;
-        }
-    </style>
 </head>
 
 <body>
-    <!-- Flash lumineux -->
-    <div class="flash-overlay" id="flash-overlay"></div>
-
     <section id="phase-intro" class="phase active">
-        <div class="intro-card" id="intro-card">
+        <div class="intro-card">
             <p class="intro-text">Aujourd'hui, on met à l'épreuve votre mémoire !</p>
         </div>
-        <p class="intro-hint" id="intro-hint">Attendez le signal du téléphone...</p>
+        <p class="intro-hint">Attendez le signal du téléphone...</p>
     </section>
 
     <script src="transitions.js"></script>
@@ -94,25 +30,7 @@
             try {
                 const data = JSON.parse(event.data);
                 if (data.type === 'NEXT_PAGE') {
-                    // Effet visuel immédiat pour montrer que le signal est reçu
-                    const card = document.getElementById('intro-card');
-                    const hint = document.getElementById('intro-hint');
-                    const flash = document.getElementById('flash-overlay');
-
-                    // Déclencher le flash
-                    flash.classList.add('active');
-
-                    // Animation sur la carte
-                    card.classList.add('signal-received');
-
-                    // Changer le texte
-                    hint.textContent = 'C\'est parti ! ✨';
-                    hint.classList.add('signal-received');
-
-                    // Naviguer après un court délai pour voir l'effet
-                    setTimeout(() => {
-                        navigateTo(data.target || 'consignes.html');
-                    }, 400);
+                    navigateTo(data.target || 'consignes.html');
                 }
             } catch (e) {
                 console.error('Erreur:', e);
