@@ -191,19 +191,18 @@
         let manualDisconnect = false;
 
         function disconnect() {
-            if (ws) {
+            if (ws && ws.readyState === WebSocket.OPEN) {
                 manualDisconnect = true;
                 if (navigator.vibrate) navigator.vibrate(50);
+
+                // Envoyer au PC de retourner à la page d'accueil
+                ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'index.html' }));
+
+                // Fermer la connexion WebSocket
                 ws.close();
-                document.getElementById('title').textContent = 'Déconnecté';
-                document.getElementById('title').style.color = '#888';
-                document.getElementById('waiting-message').textContent = 'Vous avez quitté la session. Rafraîchissez la page pour vous reconnecter.';
-                document.getElementById('waiting-message').classList.remove('hidden');
-                document.getElementById('buttons-container').classList.add('hidden');
-                document.getElementById('nav-phase').classList.add('hidden');
-                document.getElementById('btn-disconnect').classList.add('hidden');
-                document.getElementById('status').textContent = 'Déconnecté';
-                document.getElementById('status').style.color = '#888';
+
+                // Rediriger le téléphone vers la page d'accueil
+                window.location.href = 'index.html';
             }
         }
 
