@@ -489,6 +489,10 @@
                         replayBtn.textContent = 'Rejouer';
                         replayBtn.onclick = () => {
                             if (navigator.vibrate) navigator.vibrate(50);
+                            // Afficher message d'attente
+                            document.getElementById('question-title').textContent = 'Préparez-vous !';
+                            document.getElementById('question-text').textContent = 'Le tableau va s\'afficher...';
+                            document.getElementById('buttons-container').innerHTML = '';
                             ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'game.html?level=1' }));
                         };
                         container.appendChild(replayBtn);
@@ -499,6 +503,10 @@
                             nextBtn.textContent = 'Niveau suivant';
                             nextBtn.onclick = () => {
                                 if (navigator.vibrate) navigator.vibrate(50);
+                                // Afficher message d'attente
+                                document.getElementById('question-title').textContent = 'Niveau 2';
+                                document.getElementById('question-text').textContent = 'Le tableau va s\'afficher...';
+                                document.getElementById('buttons-container').innerHTML = '';
                                 ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'game.html?level=2' }));
                             };
                             container.appendChild(nextBtn);
