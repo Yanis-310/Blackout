@@ -378,6 +378,15 @@ function buildFinalResult() {
         scoreValueEl.textContent = percentage + '%';
     }
 
+    // Notifier le téléphone que le jeu est terminé
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+            type: 'GAME_END',
+            level: currentLevel === LEVEL1 ? 1 : 2,
+            score: percentage
+        }));
+    }
+
     // Mettre à jour les boutons de fin
     updateEndGameButtons();
 }
@@ -443,9 +452,17 @@ function connectWS() {
     ws.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data);
+
+            // Navigation depuis le téléphone
+            if (data.type === 'NEXT_PAGE' && data.target) {
+                console.log('Navigation vers:', data.target);
+                navigateTo(data.target);
+                return;
+            }
+
+            // Réponse du téléphone
             if (data.type === 'ANSWER' && phaseConstruction.classList.contains('active')) {
                 console.log('Réponse reçue du téléphone:', data.value);
-                // Vérifier si l'index est valide pour la question actuelle
                 const currentQ = currentLevel.questions[currentQuestionIndex];
                 if (currentQ && data.value < currentQ.choices.length) {
                     selectChoice(data.value);

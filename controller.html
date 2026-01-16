@@ -215,9 +215,49 @@
                         document.getElementById('title').textContent = 'Bravo !';
                         document.getElementById('question-info').textContent = '';
                         document.getElementById('question-text').classList.add('hidden');
-                        document.getElementById('buttons-container').classList.add('hidden');
-                        document.getElementById('waiting-message').textContent = 'Le jeu est terminé !';
-                        document.getElementById('waiting-message').classList.remove('hidden');
+                        document.getElementById('waiting-message').classList.add('hidden');
+
+                        // Afficher les boutons de fin de jeu
+                        const container = document.getElementById('buttons-container');
+                        container.classList.remove('hidden');
+                        container.innerHTML = '';
+
+                        // Bouton Rejouer
+                        const replayBtn = document.createElement('div');
+                        replayBtn.className = 'btn-choice';
+                        replayBtn.textContent = '🔄 Rejouer';
+                        replayBtn.onclick = () => {
+                            if (navigator.vibrate) navigator.vibrate(50);
+                            ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'game.html?level=1' }));
+                        };
+                        container.appendChild(replayBtn);
+
+                        // Bouton Niveau suivant (si niveau 1)
+                        if (data.level === 1) {
+                            const nextBtn = document.createElement('div');
+                            nextBtn.className = 'btn-choice';
+                            nextBtn.style.background = '#693CFF';
+                            nextBtn.style.color = '#fff';
+                            nextBtn.style.borderColor = '#693CFF';
+                            nextBtn.textContent = '➡️ Niveau suivant';
+                            nextBtn.onclick = () => {
+                                if (navigator.vibrate) navigator.vibrate(50);
+                                ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'game.html?level=2' }));
+                            };
+                            container.appendChild(nextBtn);
+                        }
+
+                        // Bouton Accueil (si niveau 2)
+                        if (data.level === 2) {
+                            const homeBtn = document.createElement('div');
+                            homeBtn.className = 'btn-choice';
+                            homeBtn.textContent = '🏠 Retour accueil';
+                            homeBtn.onclick = () => {
+                                if (navigator.vibrate) navigator.vibrate(50);
+                                ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'index.html' }));
+                            };
+                            container.appendChild(homeBtn);
+                        }
                     }
                 } catch (e) {
                     console.error('Erreur message WS:', e);
