@@ -234,18 +234,11 @@ function generateProgressDots() {
 
     questionProgress.innerHTML = '';
     for (let i = 0; i < currentLevel.questions.length; i++) {
-        // Ajouter le point
+        // Ajouter le point avec la nouvelle classe
         const dot = document.createElement('div');
-        dot.className = 'chain-dot';
+        dot.className = 'game-progress-dot';
         if (i === 0) dot.classList.add('active');
         questionProgress.appendChild(dot);
-
-        // Ajouter le lien entre les points (sauf après le dernier)
-        if (i < currentLevel.questions.length - 1) {
-            const link = document.createElement('div');
-            link.className = 'chain-link';
-            questionProgress.appendChild(link);
-        }
     }
 }
 
@@ -279,6 +272,12 @@ function showQuestion() {
     currentQuestionSpan.textContent = currentQuestionIndex + 1;
     questionText.textContent = question.text;
 
+    // Mettre à jour le titre de question (nouveau design)
+    const questionTitleDisplay = document.getElementById('question-title-display');
+    if (questionTitleDisplay) {
+        questionTitleDisplay.textContent = `Question ${currentQuestionIndex + 1} :`;
+    }
+
     // Mettre à jour la barre de progression
     updateProgressBar();
 
@@ -297,7 +296,7 @@ function showQuestion() {
     choicesContainer.innerHTML = '';
     question.choices.forEach((choice, index) => {
         const btn = document.createElement('button');
-        btn.className = 'choice-btn';
+        btn.className = 'new-choice-btn';
         btn.textContent = choice.label;
         btn.onclick = () => selectChoice(index);
         choicesContainer.appendChild(btn);
@@ -305,8 +304,7 @@ function showQuestion() {
 }
 
 function updateProgressBar() {
-    const dots = document.querySelectorAll('.chain-dot');
-    const links = document.querySelectorAll('.chain-link');
+    const dots = document.querySelectorAll('.game-progress-dot');
 
     dots.forEach((dot, index) => {
         dot.classList.remove('active', 'completed');
@@ -314,13 +312,6 @@ function updateProgressBar() {
             dot.classList.add('completed');
         } else if (index === currentQuestionIndex) {
             dot.classList.add('active');
-        }
-    });
-
-    links.forEach((link, index) => {
-        link.classList.remove('completed');
-        if (index < currentQuestionIndex) {
-            link.classList.add('completed');
         }
     });
 }
