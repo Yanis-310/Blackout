@@ -126,20 +126,23 @@
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
         }
 
-        /* Nature morte positionnée à côté des progress dots */
+        /* Nature morte positionnée sur le coin droit du cadre blanc */
         .quiz-nature-morte {
-            width: 180px;
+            position: absolute;
+            top: -50px;
+            right: -30px;
+            width: 200px;
             height: auto;
+            z-index: 10;
             filter: drop-shadow(3px 3px 10px rgba(0, 0, 0, 0.3));
-            margin-left: 15px;
         }
 
-        /* Conteneur pour dots + nature morte */
-        .progress-row {
+        /* Progress dots */
+        .game-progress-dots {
             display: flex;
-            align-items: center;
+            gap: 12px;
             justify-content: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         /* ============================================
@@ -246,16 +249,16 @@
                 <img src="assets/logo-lines.png" alt="" class="game-logo-lines">
             </div>
 
-            <!-- Progress Dots + Nature morte sur la même ligne -->
-            <div class="progress-row">
-                <div id="question-progress" class="game-progress-dots">
-                    <!-- Dots générés dynamiquement -->
-                </div>
-                <img src="assets/nature-morte.png" alt="Nature morte" class="quiz-nature-morte">
+            <!-- Progress Dots -->
+            <div id="question-progress" class="game-progress-dots">
+                <!-- Dots générés dynamiquement -->
             </div>
 
             <!-- Quiz Card -->
             <div class="new-quiz-card">
+                <!-- Nature morte sur le coin droit -->
+                <img src="assets/nature-morte.png" alt="Nature morte" class="quiz-nature-morte">
+
                 <p class="new-question-title" id="question-title-display">Question 1 :</p>
                 <p class="new-question-text" id="question-text"></p>
 
