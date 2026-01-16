@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         .intro-card-large {
+            position: relative;
             background: #ffffff;
             border-radius: 30px;
             padding: 3rem 4rem 4rem;
@@ -18,6 +19,18 @@
             width: 90%;
             text-align: center;
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Image nature morte en haut à droite */
+        .qr-nature-morte {
+            position: absolute;
+            top: -50px;
+            right: -2px;
+            width: 200px;
+            height: auto;
+            z-index: 3;
+            pointer-events: none;
+            filter: drop-shadow(3px 3px 10px rgba(0, 0, 0, 0.3));
         }
 
         .qr-text {
@@ -80,13 +93,17 @@
 <body>
     <section id="phase-intro" class="phase active">
         <div class="intro-card-large">
-            <p class="qr-text">Pour jouer, scanne ce QR code avec ton smartphone :</p>
+            <!-- Image nature morte en haut à droite -->
+            <img src="assets/nature-morte.png" alt="Nature morte" class="qr-nature-morte">
+
+            <p class="qr-text">Pour jouer, connecte-toi avec ton smartphone en scannant le <span
+                    style="color: #693CFF;">QR code</span> ci-dessous :</p>
             <div class="qr-code">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://blackout-game.com"
                     alt="QR Code">
             </div>
             <p class="connection-status" id="connection-status">
-                <span class="waiting-dots">En attente de connexion</span>
+                <span class="waiting-dots">Attente de la connexion d'un smartphone</span>
             </p>
         </div>
     </section>
