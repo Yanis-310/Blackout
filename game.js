@@ -5,8 +5,8 @@
 // LEVEL 1 - Tableau original (3 questions - Mode Essai)
 const LEVEL1 = {
     name: "Mode Essai",
-    title: "L'Enfant au toton",
-    author: "Jean Siméon Chardin",
+    title: "La leçon aux poupées",
+    author: "Gaston Schnegg",
     observationTime: 10,
     fondPiece: "assets/sans-element.png",
     vraiTableau: "assets/tableau-final.jpg",
