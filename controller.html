@@ -225,7 +225,7 @@
                         // Bouton Rejouer
                         const replayBtn = document.createElement('div');
                         replayBtn.className = 'btn-choice';
-                        replayBtn.textContent = '🔄 Rejouer';
+                        replayBtn.textContent = 'Rejouer';
                         replayBtn.onclick = () => {
                             if (navigator.vibrate) navigator.vibrate(50);
                             ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'game.html?level=1' }));
@@ -239,7 +239,7 @@
                             nextBtn.style.background = '#693CFF';
                             nextBtn.style.color = '#fff';
                             nextBtn.style.borderColor = '#693CFF';
-                            nextBtn.textContent = '➡️ Niveau suivant';
+                            nextBtn.textContent = 'Niveau suivant';
                             nextBtn.onclick = () => {
                                 if (navigator.vibrate) navigator.vibrate(50);
                                 ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'game.html?level=2' }));
@@ -251,7 +251,7 @@
                         if (data.level === 2) {
                             const homeBtn = document.createElement('div');
                             homeBtn.className = 'btn-choice';
-                            homeBtn.textContent = '🏠 Retour accueil';
+                            homeBtn.textContent = 'Retour accueil';
                             homeBtn.onclick = () => {
                                 if (navigator.vibrate) navigator.vibrate(50);
                                 ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'index.html' }));
@@ -310,7 +310,7 @@
 
             // Dernière étape avant le jeu (ready.html -> game.html)
             if (currentPageIndex === pageSequence.length - 1) {
-                btn.textContent = '🎮 Commencer';
+                btn.textContent = 'Commencer';
                 instruction.textContent = 'Observez bien le tableau !';
             }
         }
