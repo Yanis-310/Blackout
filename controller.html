@@ -106,6 +106,32 @@
             background: #5930E0;
         }
 
+        /* État "envoyé" du bouton */
+        .btn-next.sent {
+            background: #4CAF50;
+            animation: pulseSuccess 0.5s ease-out;
+        }
+
+        @keyframes pulseSuccess {
+            0% {
+                transform: scale(0.95);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Message de confirmation */
+        .nav-instruction.sent {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
         .status {
             position: absolute;
             bottom: 60px;
@@ -342,8 +368,19 @@
 
         function sendNextPage() {
             if (ws && ws.readyState === WebSocket.OPEN) {
+                const btn = document.getElementById('btn-next');
+                const instruction = document.querySelector('.nav-instruction');
+                const originalText = btn.textContent;
+                const originalInstruction = instruction.textContent;
+
                 // Vibration feedback
                 if (navigator.vibrate) navigator.vibrate(50);
+
+                // Feedback visuel immédiat - montrer que l'action est envoyée
+                btn.textContent = 'Envoyé ✓';
+                btn.classList.add('sent');
+                instruction.textContent = 'Action transmise à l\'écran !';
+                instruction.classList.add('sent');
 
                 // Envoyer le signal pour passer à la page suivante
                 const targetPage = pageSequence[currentPageIndex];
@@ -355,16 +392,22 @@
                 // Passer à la page suivante dans la séquence
                 currentPageIndex++;
 
-                // Mettre à jour le texte selon l'étape
-                updateNavText();
+                // Après un court délai, remettre le bouton à son état normal ou le masquer
+                setTimeout(() => {
+                    btn.classList.remove('sent');
+                    instruction.classList.remove('sent');
 
-                // Si on a dépassé ready.html, le jeu va commencer
-                if (currentPageIndex >= pageSequence.length) {
-                    document.getElementById('waiting-message').textContent = 'Observez bien le tableau...';
-                    document.getElementById('waiting-message').classList.remove('hidden');
-                    document.getElementById('btn-next').classList.add('hidden');
-                    document.querySelector('.nav-instruction').classList.add('hidden');
-                }
+                    // Si on a dépassé ready.html, le jeu va commencer
+                    if (currentPageIndex >= pageSequence.length) {
+                        document.getElementById('waiting-message').textContent = 'Observez bien le tableau...';
+                        document.getElementById('waiting-message').classList.remove('hidden');
+                        btn.classList.add('hidden');
+                        instruction.classList.add('hidden');
+                    } else {
+                        // Mettre à jour le texte selon l'étape
+                        updateNavText();
+                    }
+                }, 800);
             }
         }
 
