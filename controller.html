@@ -519,6 +519,19 @@
                             homeBtn.onclick = () => {
                                 if (navigator.vibrate) navigator.vibrate(50);
                                 ws.send(JSON.stringify({ type: 'NEXT_PAGE', target: 'index.html' }));
+
+                                // Afficher message de fin et déconnecter
+                                manualDisconnect = true;
+                                document.getElementById('question-title').textContent = 'Merci d\'avoir joué !';
+                                document.getElementById('question-text').textContent = 'À bientôt pour une nouvelle partie.';
+                                document.getElementById('buttons-container').innerHTML = '';
+                                document.getElementById('btn-disconnect').classList.add('hidden');
+                                document.getElementById('status').textContent = 'Déconnecté';
+                                document.getElementById('status').style.color = '#888';
+
+                                setTimeout(() => {
+                                    ws.close();
+                                }, 500);
                             };
                             container.appendChild(homeBtn);
                         }
