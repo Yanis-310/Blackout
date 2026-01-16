@@ -108,7 +108,7 @@
 
         .status {
             position: absolute;
-            bottom: 20px;
+            bottom: 60px;
             font-size: 0.8rem;
             color: #888;
         }
@@ -130,6 +130,26 @@
             font-size: 1rem;
             color: #888;
             margin-top: 1rem;
+        }
+
+        /* Bouton de déconnexion */
+        .btn-disconnect {
+            position: absolute;
+            bottom: 15px;
+            background: transparent;
+            border: 1px solid #555;
+            color: #888;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-disconnect:active {
+            background: #f44336;
+            border-color: #f44336;
+            color: white;
         }
     </style>
 </head>
@@ -156,6 +176,7 @@
     </div>
 
     <div class="status" id="status">Déconnecté</div>
+    <button class="btn-disconnect" id="btn-disconnect" onclick="disconnect()">Se déconnecter</button>
 
     <script>
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -167,6 +188,24 @@
         // Séquence des pages de consignes sur le PC
         const pageSequence = ['intro.html', 'consignes.html', 'consignes2.html', 'ready.html', 'game.html?level=1'];
         let currentPageIndex = 0;
+        let manualDisconnect = false;
+
+        function disconnect() {
+            if (ws) {
+                manualDisconnect = true;
+                if (navigator.vibrate) navigator.vibrate(50);
+                ws.close();
+                document.getElementById('title').textContent = 'Déconnecté';
+                document.getElementById('title').style.color = '#888';
+                document.getElementById('waiting-message').textContent = 'Vous avez quitté la session. Rafraîchissez la page pour vous reconnecter.';
+                document.getElementById('waiting-message').classList.remove('hidden');
+                document.getElementById('buttons-container').classList.add('hidden');
+                document.getElementById('nav-phase').classList.add('hidden');
+                document.getElementById('btn-disconnect').classList.add('hidden');
+                document.getElementById('status').textContent = 'Déconnecté';
+                document.getElementById('status').style.color = '#888';
+            }
+        }
 
         function connect() {
             ws = new WebSocket(wsUrl);
@@ -280,6 +319,10 @@
             };
 
             ws.onclose = () => {
+                if (manualDisconnect) {
+                    // Déconnexion manuelle, ne pas se reconnecter
+                    return;
+                }
                 document.getElementById('status').textContent = 'Déconnecté - Reconnexion...';
                 document.getElementById('status').style.color = '#f44336';
                 setTimeout(connect, 3000);
