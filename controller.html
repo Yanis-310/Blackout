@@ -291,13 +291,27 @@
                 // Passer à la page suivante dans la séquence
                 currentPageIndex++;
 
+                // Mettre à jour le texte selon l'étape
+                updateNavText();
+
                 // Si on a dépassé ready.html, le jeu va commencer
                 if (currentPageIndex >= pageSequence.length) {
-                    document.getElementById('waiting-message').textContent = 'Le jeu va commencer...';
+                    document.getElementById('waiting-message').textContent = 'Observez bien le tableau...';
                     document.getElementById('waiting-message').classList.remove('hidden');
                     document.getElementById('btn-next').classList.add('hidden');
                     document.querySelector('.nav-instruction').classList.add('hidden');
                 }
+            }
+        }
+
+        function updateNavText() {
+            const btn = document.getElementById('btn-next');
+            const instruction = document.querySelector('.nav-instruction');
+
+            // Dernière étape avant le jeu (ready.html -> game.html)
+            if (currentPageIndex === pageSequence.length - 1) {
+                btn.textContent = '🎮 Commencer';
+                instruction.textContent = 'Observez bien le tableau !';
             }
         }
 
