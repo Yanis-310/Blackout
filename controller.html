@@ -188,7 +188,7 @@
         <p class="question-info" id="question-info"></p>
         <p class="question-text hidden" id="question-text"></p>
 
-        <p class="waiting-message" id="waiting-message">Appuyez sur le bouton ci-dessous pour commencer</p>
+        <p class="waiting-message" id="waiting-message">Lisez les consignes sur l'écran principal</p>
 
         <div class="buttons-container hidden" id="buttons-container">
             <!-- Buttons will be dynamically generated -->
@@ -198,7 +198,7 @@
     <!-- Phase de navigation (bouton Suivant) -->
     <div id="nav-phase">
         <button class="btn-next" id="btn-next" onclick="sendNextPage()">Suivant →</button>
-        <p class="nav-instruction">Appuyez pour continuer sur l'écran principal</p>
+        <p class="nav-instruction">Consigne suivante</p>
     </div>
 
     <div class="status" id="status">Déconnecté</div>
@@ -377,9 +377,9 @@
                 if (navigator.vibrate) navigator.vibrate(50);
 
                 // Feedback visuel immédiat - montrer que l'action est envoyée
-                btn.textContent = 'Envoyé ✓';
+                btn.textContent = 'Consigne lue ✓';
                 btn.classList.add('sent');
-                instruction.textContent = 'Action transmise à l\'écran !';
+                instruction.textContent = 'Chargement...';
                 instruction.classList.add('sent');
 
                 // Envoyer le signal pour passer à la page suivante
@@ -422,7 +422,7 @@
             } else {
                 // Remettre le texte par défaut
                 btn.textContent = 'Suivant →';
-                instruction.textContent = 'Appuyez pour continuer sur l\'écran principal';
+                instruction.textContent = 'Consigne suivante';
             }
         }
 
