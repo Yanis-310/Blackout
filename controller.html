@@ -281,6 +281,71 @@
         }
 
         /* ============================================
+           COUNTDOWN OVERLAY
+           ============================================ */
+        .countdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .countdown-overlay.hidden {
+            display: none !important;
+        }
+
+        .countdown-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .countdown-message {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.5;
+            max-width: 300px;
+            margin-bottom: 30px;
+        }
+
+        .countdown-number {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: #693CFF;
+            line-height: 1;
+            margin-bottom: 10px;
+            animation: countPulse 1s ease-in-out;
+        }
+
+        @keyframes countPulse {
+            0% { transform: scale(1.3); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .countdown-sublabel {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: #888;
+        }
+
+        /* ============================================
            STATUS & DISCONNECT
            ============================================ */
         .status {
@@ -369,6 +434,14 @@
         <button class="btn-next" id="btn-next" onclick="sendNextPage()">Suivant →</button>
         <p class="nav-instruction">Consigne suivante</p>
         <p class="waiting-message" id="waiting-message">Lisez les consignes sur l'écran principal</p>
+    </div>
+
+    <!-- Countdown Overlay -->
+    <div class="countdown-overlay hidden" id="countdown-overlay">
+        <div class="countdown-icon">🖥️</div>
+        <p class="countdown-message">Le tableau va s'afficher sur l'écran en face de vous.<br>Regardez attentivement !</p>
+        <div class="countdown-number" id="countdown-number">5</div>
+        <p class="countdown-sublabel">Préparez-vous...</p>
     </div>
 
     <div class="status" id="status">Déconnecté</div>
@@ -554,6 +627,45 @@
             };
         }
 
+        function startCountdown(targetPage) {
+            const overlay = document.getElementById('countdown-overlay');
+            const countdownNumber = document.getElementById('countdown-number');
+            overlay.classList.remove('hidden');
+
+            let seconds = 5;
+            countdownNumber.textContent = seconds;
+
+            const interval = setInterval(() => {
+                seconds--;
+                if (seconds > 0) {
+                    countdownNumber.textContent = seconds;
+                    // Re-trigger animation
+                    countdownNumber.style.animation = 'none';
+                    countdownNumber.offsetHeight; // force reflow
+                    countdownNumber.style.animation = 'countPulse 1s ease-in-out';
+                } else {
+                    clearInterval(interval);
+                    countdownNumber.textContent = 'C\'est parti !';
+                    countdownNumber.style.fontSize = '2.5rem';
+
+                    // Envoyer la commande pour lancer le jeu
+                    ws.send(JSON.stringify({
+                        type: 'NEXT_PAGE',
+                        target: targetPage
+                    }));
+
+                    // Masquer l'overlay après un court instant
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        countdownNumber.style.fontSize = '5rem';
+                        document.getElementById('waiting-message').textContent = 'Observez bien le tableau...';
+                        document.getElementById('btn-next').classList.add('hidden');
+                        document.querySelector('.nav-instruction').classList.add('hidden');
+                    }, 800);
+                }
+            }, 1000);
+        }
+
         function sendNextPage() {
             if (ws && ws.readyState === WebSocket.OPEN) {
                 const btn = document.getElementById('btn-next');
@@ -561,31 +673,34 @@
 
                 if (navigator.vibrate) navigator.vibrate(50);
 
-                btn.textContent = 'Consigne lue ✓';
-                btn.classList.add('sent');
-                instruction.textContent = 'Chargement...';
-                instruction.classList.add('sent');
-
                 const targetPage = pageSequence[currentPageIndex];
-                ws.send(JSON.stringify({
-                    type: 'NEXT_PAGE',
-                    target: targetPage
-                }));
+                const isLastPage = (currentPageIndex === pageSequence.length - 1);
 
-                currentPageIndex++;
+                if (isLastPage) {
+                    // Dernier bouton "Commencer" → afficher le décompte
+                    btn.classList.add('hidden');
+                    instruction.classList.add('hidden');
+                    currentPageIndex++;
+                    startCountdown(targetPage);
+                } else {
+                    btn.textContent = 'Consigne lue ✓';
+                    btn.classList.add('sent');
+                    instruction.textContent = 'Chargement...';
+                    instruction.classList.add('sent');
 
-                setTimeout(() => {
-                    btn.classList.remove('sent');
-                    instruction.classList.remove('sent');
+                    ws.send(JSON.stringify({
+                        type: 'NEXT_PAGE',
+                        target: targetPage
+                    }));
 
-                    if (currentPageIndex >= pageSequence.length) {
-                        document.getElementById('waiting-message').textContent = 'Observez bien le tableau...';
-                        btn.classList.add('hidden');
-                        instruction.classList.add('hidden');
-                    } else {
+                    currentPageIndex++;
+
+                    setTimeout(() => {
+                        btn.classList.remove('sent');
+                        instruction.classList.remove('sent');
                         updateNavText();
-                    }
-                }, 800);
+                    }, 800);
+                }
             }
         }
 
