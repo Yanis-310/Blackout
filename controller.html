@@ -391,6 +391,169 @@
         #quiz-phase.hidden {
             display: none;
         }
+
+        /* ============================================
+           PSEUDO INPUT PHASE
+           ============================================ */
+        #pseudo-phase {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        #pseudo-phase.hidden {
+            display: none !important;
+        }
+
+        .pseudo-card {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 2rem 1.8rem;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .pseudo-card h2 {
+            font-family: 'PP Editorial New', 'DM Sans', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            color: #2d2d2d;
+            margin-bottom: 0.5rem;
+        }
+
+        .pseudo-card p {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: #888;
+            margin-bottom: 1.2rem;
+        }
+
+        .pseudo-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-family: 'DM Sans', sans-serif;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+        }
+
+        .pseudo-input:focus {
+            border-color: #693CFF;
+        }
+
+        .pseudo-input::placeholder {
+            color: #bbb;
+        }
+
+        .btn-pseudo-ok {
+            background: #693CFF;
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-pseudo-ok:active {
+            background: #5930E0;
+            transform: scale(0.97);
+        }
+
+        .btn-pseudo-ok:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* ============================================
+           LEADERBOARD
+           ============================================ */
+        .leaderboard-section {
+            width: 100%;
+            max-width: 350px;
+            margin-top: 20px;
+        }
+
+        .leaderboard-title {
+            font-family: 'PP Editorial New', 'DM Sans', serif;
+            font-style: italic;
+            font-size: 1.3rem;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .leaderboard-list {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            gap: 12px;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-item.current-user {
+            background: rgba(105, 60, 255, 0.15);
+        }
+
+        .lb-rank {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: #693CFF;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        .lb-rank.gold { color: #FFD700; }
+        .lb-rank.silver { color: #C0C0C0; }
+        .lb-rank.bronze { color: #CD7F32; }
+
+        .lb-name {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: #ffffff;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .lb-score {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #693CFF;
+        }
+
+        .leaderboard-empty {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 
@@ -408,6 +571,16 @@
             </div>
         </div>
         <img src="assets/logo-lines.png" alt="" class="logo-lines-img">
+    </div>
+
+    <!-- Phase Pseudo -->
+    <div id="pseudo-phase">
+        <div class="pseudo-card">
+            <h2>Bienvenue !</h2>
+            <p>Entrez votre pseudo pour commencer</p>
+            <input type="text" class="pseudo-input" id="pseudo-input" placeholder="Votre pseudo..." maxlength="20" autocomplete="off">
+            <button class="btn-pseudo-ok" id="btn-pseudo-ok" onclick="validatePseudo()" disabled>C'est parti !</button>
+        </div>
     </div>
 
     <!-- Progress Dots -->
@@ -430,10 +603,18 @@
     </div>
 
     <!-- Phase de navigation (bouton Suivant) -->
-    <div id="nav-phase">
+    <div id="nav-phase" class="hidden">
         <button class="btn-next" id="btn-next" onclick="sendNextPage()">Suivant →</button>
         <p class="nav-instruction">Consigne suivante</p>
         <p class="waiting-message" id="waiting-message">Lisez les consignes sur l'écran principal</p>
+    </div>
+
+    <!-- Leaderboard (affiché en fin de jeu) -->
+    <div id="leaderboard-section" class="leaderboard-section hidden">
+        <p class="leaderboard-title">🏆 Classement</p>
+        <div class="leaderboard-list" id="leaderboard-list">
+            <!-- Rempli dynamiquement -->
+        </div>
     </div>
 
     <!-- Countdown Overlay -->
@@ -452,12 +633,96 @@
         const wsUrl = protocol + '//' + window.location.host;
         let ws;
         let hasAnswered = false;
-        let currentPhase = 'nav'; // 'nav' pour navigation, 'quiz' pour les questions
+        let currentPhase = 'pseudo'; // 'pseudo', 'nav', 'quiz'
         let totalQuestions = 0;
         let currentQuestionIndex = 0;
+        let playerPseudo = '';
 
         // Séquence des pages de consignes sur le PC
         const pageSequence = ['intro.html', 'consignes.html', 'consignes2.html', 'ready.html', 'game.html?level=1'];
+
+        // --- Pseudo input logic ---
+        const pseudoInput = document.getElementById('pseudo-input');
+        const pseudoBtn = document.getElementById('btn-pseudo-ok');
+
+        pseudoInput.addEventListener('input', () => {
+            pseudoBtn.disabled = pseudoInput.value.trim().length === 0;
+        });
+
+        pseudoInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && pseudoInput.value.trim().length > 0) {
+                validatePseudo();
+            }
+        });
+
+        function validatePseudo() {
+            playerPseudo = pseudoInput.value.trim();
+            if (!playerPseudo) return;
+            if (navigator.vibrate) navigator.vibrate(50);
+
+            // Masquer la phase pseudo, afficher la phase nav
+            document.getElementById('pseudo-phase').classList.add('hidden');
+            document.getElementById('nav-phase').classList.remove('hidden');
+            currentPhase = 'nav';
+        }
+
+        // --- Leaderboard logic ---
+        async function saveScore(pseudo, score, level) {
+            try {
+                await fetch('/api/scores', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pseudo, score, level })
+                });
+            } catch (e) {
+                console.error('Erreur sauvegarde score:', e);
+            }
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const res = await fetch('/api/scores');
+                const scores = await res.json();
+                displayLeaderboard(scores);
+            } catch (e) {
+                console.error('Erreur chargement classement:', e);
+            }
+        }
+
+        function displayLeaderboard(scores) {
+            const container = document.getElementById('leaderboard-list');
+            const section = document.getElementById('leaderboard-section');
+
+            if (!scores || scores.length === 0) {
+                container.innerHTML = '<p class="leaderboard-empty">Aucun score enregistré</p>';
+                section.classList.remove('hidden');
+                return;
+            }
+
+            // Prendre les 10 meilleurs
+            const top = scores.slice(0, 10);
+            container.innerHTML = '';
+
+            top.forEach((entry, i) => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                if (entry.pseudo === playerPseudo) {
+                    item.classList.add('current-user');
+                }
+
+                const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+                const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`;
+
+                item.innerHTML = `
+                    <span class="lb-rank ${rankClass}">${rankIcon}</span>
+                    <span class="lb-name">${entry.pseudo}</span>
+                    <span class="lb-score">${entry.score}%</span>
+                `;
+                container.appendChild(item);
+            });
+
+            section.classList.remove('hidden');
+        }
         let currentPageIndex = 0;
         let manualDisconnect = false;
 
@@ -556,6 +821,9 @@
                         const container = document.getElementById('buttons-container');
                         container.innerHTML = '';
 
+                        // Sauvegarder le score et afficher le classement
+                        saveScore(playerPseudo, data.score, data.level).then(() => loadLeaderboard());
+
                         // Bouton Rejouer
                         const replayBtn = document.createElement('div');
                         replayBtn.className = 'btn-choice';
@@ -563,6 +831,7 @@
                         replayBtn.onclick = () => {
                             if (navigator.vibrate) navigator.vibrate(50);
                             document.getElementById('quiz-phase').classList.add('hidden');
+                            document.getElementById('leaderboard-section').classList.add('hidden');
                             startCountdown('game.html?level=' + data.level);
                         };
                         container.appendChild(replayBtn);
@@ -574,6 +843,7 @@
                             nextBtn.onclick = () => {
                                 if (navigator.vibrate) navigator.vibrate(50);
                                 document.getElementById('quiz-phase').classList.add('hidden');
+                                document.getElementById('leaderboard-section').classList.add('hidden');
                                 startCountdown('game.html?level=2');
                             };
                             container.appendChild(nextBtn);

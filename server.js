@@ -4,12 +4,52 @@ const WebSocket = require('ws');
 const path = require('path');
 const ip = require('ip');
 
+const fs = require('fs');
+
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// Servir les fichiers statiques (le jeu)
+const SCORES_FILE = path.join(__dirname, 'scores.json');
+
+// Middleware
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '.')));
+
+// Lire les scores depuis le fichier
+function readScores() {
+    try {
+        const data = fs.readFileSync(SCORES_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch (e) {
+        return [];
+    }
+}
+
+// Sauvegarder les scores dans le fichier
+function writeScores(scores) {
+    fs.writeFileSync(SCORES_FILE, JSON.stringify(scores, null, 2));
+}
+
+// GET /api/scores - Récupérer le classement
+app.get('/api/scores', (req, res) => {
+    const scores = readScores();
+    // Trier par score décroissant
+    scores.sort((a, b) => b.score - a.score);
+    res.json(scores);
+});
+
+// POST /api/scores - Enregistrer un score
+app.post('/api/scores', (req, res) => {
+    const { pseudo, score, level } = req.body;
+    if (!pseudo || score === undefined || !level) {
+        return res.status(400).json({ error: 'pseudo, score et level requis' });
+    }
+    const scores = readScores();
+    scores.push({ pseudo, score, level, timestamp: Date.now() });
+    writeScores(scores);
+    res.json({ success: true });
+});
 
 // Variable pour tracker le téléphone connecté (un seul autorisé)
 let connectedPhone = null;
