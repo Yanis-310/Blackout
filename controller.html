@@ -813,6 +813,18 @@
                         return;
                     }
 
+                    if (data.type === 'FORCE_DISCONNECT') {
+                        manualDisconnect = true;
+                        document.getElementById('quiz-phase').classList.add('hidden');
+                        document.getElementById('nav-phase').classList.add('hidden');
+                        document.getElementById('pseudo-phase').classList.remove('hidden');
+                        document.getElementById('leaderboard-section').classList.add('hidden');
+                        document.getElementById('btn-disconnect').classList.add('hidden');
+                        document.getElementById('status').textContent = 'Déconnecté par l\'hôte';
+                        document.getElementById('status').style.color = '#f44336';
+                        return;
+                    }
+
                     if (data.type === 'GAME_END') {
                         document.getElementById('question-title').textContent = 'Bravo !';
                         document.getElementById('question-text').textContent = `Score : ${data.score}%`;

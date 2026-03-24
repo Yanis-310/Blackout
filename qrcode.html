@@ -158,6 +158,28 @@
                 content: '...';
             }
         }
+
+        .btn-force-disconnect {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #888;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .btn-force-disconnect:hover {
+            background: rgba(244, 67, 54, 0.15);
+            border-color: rgba(244, 67, 54, 0.4);
+            color: #f44336;
+        }
     </style>
 </head>
 
@@ -189,6 +211,8 @@
             </p>
         </div>
     </section>
+
+    <button class="btn-force-disconnect" id="btn-force-disconnect" onclick="forceDisconnectAll()">🔌 Déconnecter les appareils</button>
 
     <script src="transitions.js"></script>
     <script>
@@ -224,6 +248,21 @@
                 if (data.type === 'NEXT_PAGE') {
                     navigateTo(data.target || 'intro.html');
                 }
+
+                // Confirmation de force disconnect
+                if (data.type === 'FORCE_DISCONNECT_DONE') {
+                    const btn = document.getElementById('btn-force-disconnect');
+                    btn.textContent = `✓ ${data.count} appareil(s) déconnecté(s)`;
+                    btn.style.color = '#4CAF50';
+                    btn.style.borderColor = 'rgba(76, 175, 80, 0.4)';
+                    document.getElementById('connection-status').innerHTML = '<span class="waiting-dots">Attente de la connexion d\'un smartphone</span>';
+                    document.getElementById('connection-status').classList.remove('connected');
+                    setTimeout(() => {
+                        btn.textContent = '🔌 Déconnecter les appareils';
+                        btn.style.color = '';
+                        btn.style.borderColor = '';
+                    }, 3000);
+                }
             } catch (e) {
                 console.error('Erreur message:', e);
             }
@@ -235,6 +274,12 @@
                 ws = new WebSocket(wsUrl);
             }, 3000);
         };
+
+        function forceDisconnectAll() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'FORCE_DISCONNECT_ALL' }));
+            }
+        }
     </script>
 </body>
 

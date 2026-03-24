@@ -85,6 +85,23 @@ wss.on('connection', (ws) => {
 
         console.log('Nombre de clients pour broadcast:', wss.clients.size - 1);
 
+        // Force disconnect all other clients
+        if (data && data.type === 'FORCE_DISCONNECT_ALL') {
+            console.log('🔌 Force déconnexion de tous les clients');
+            let closedCount = 0;
+            wss.clients.forEach((client) => {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({ type: 'FORCE_DISCONNECT' }));
+                    client.close();
+                    closedCount++;
+                }
+            });
+            connectedPhone = null;
+            console.log(`🔌 ${closedCount} client(s) déconnecté(s) de force`);
+            ws.send(JSON.stringify({ type: 'FORCE_DISCONNECT_DONE', count: closedCount }));
+            return;
+        }
+
         // Broadcast le message à tous les clients (pour simplifier)
         // Idéalement : Controller -> Server -> Game
         let sentCount = 0;
