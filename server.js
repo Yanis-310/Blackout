@@ -62,31 +62,33 @@ wss.on('connection', (ws) => {
         const msgString = message.toString();
         console.log('Message reçu:', msgString);
 
+        let data;
         try {
-            const data = JSON.parse(msgString);
-
-            // Gérer la connexion du téléphone
-            if (data.type === 'PHONE_CONNECTED') {
-                if (connectedPhone !== null && connectedPhone !== ws && connectedPhone.readyState === WebSocket.OPEN) {
-                    // Un téléphone est déjà connecté, rejeter cette connexion
-                    console.log('❌ Connexion téléphone refusée - un téléphone est déjà connecté');
-                    ws.send(JSON.stringify({ type: 'PHONE_REJECTED', reason: 'Un autre téléphone est déjà connecté' }));
-                    ws.close();
-                    return;
-                } else {
-                    // Accepter cette connexion comme le téléphone actif
-                    connectedPhone = ws;
-                    console.log('✅ Téléphone connecté et enregistré');
-                }
-            }
+            data = JSON.parse(msgString);
         } catch (e) {
-            // Pas un JSON, continuer normalement
+            console.log('Message non-JSON reçu, ignoré');
+            return;
+        }
+
+        // Gérer la connexion du téléphone
+        if (data.type === 'PHONE_CONNECTED') {
+            if (connectedPhone !== null && connectedPhone !== ws && connectedPhone.readyState === WebSocket.OPEN) {
+                // Un téléphone est déjà connecté, rejeter cette connexion
+                console.log('❌ Connexion téléphone refusée - un téléphone est déjà connecté');
+                ws.send(JSON.stringify({ type: 'PHONE_REJECTED', reason: 'Un autre téléphone est déjà connecté' }));
+                ws.close();
+                return;
+            } else {
+                // Accepter cette connexion comme le téléphone actif
+                connectedPhone = ws;
+                console.log('✅ Téléphone connecté et enregistré');
+            }
         }
 
         console.log('Nombre de clients pour broadcast:', wss.clients.size - 1);
 
         // Force disconnect all other clients
-        if (data && data.type === 'FORCE_DISCONNECT_ALL') {
+        if (data.type === 'FORCE_DISCONNECT_ALL') {
             console.log('🔌 Force déconnexion de tous les clients');
             let closedCount = 0;
             wss.clients.forEach((client) => {
